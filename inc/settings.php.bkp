@@ -63,7 +63,11 @@ $settings['stopforumspam_block_on_error'] = "0";
 $settings['boardclosed'] = "0";
 $settings['boardclosed_reason'] = "These forums are currently closed for maintenance. Please check back later.";
 $settings['bbname'] = "Forums";
+<<<<<<< HEAD
 $settings['bburl'] = "http://ec2-54-200-37-250.us-west-2.compute.amazonaws.com";
+=======
+$settings['bburl'] = "http://ec2-54-149-248-147.us-west-2.compute.amazonaws.com";
+>>>>>>> a6d3c69a59737a4a675e61276905652c01791aa2
 $settings['canviewownwarning'] = "1";
 $settings['captchaimage'] = "1";
 $settings['stopforumspam_check_emails'] = "1";
@@ -81,7 +85,11 @@ $settings['faxno'] = "";
 $settings['contactlink'] = "contact.php";
 $settings['cplanguage'] = "english";
 $settings['cpstyle'] = "";
+<<<<<<< HEAD
 $settings['cookiedomain'] = ".ec2-54-200-37-250.us-west-2.compute.amazonaws.com";
+=======
+$settings['cookiedomain'] = ".ec2-54-149-248-147.us-west-2.compute.amazonaws.com";
+>>>>>>> a6d3c69a59737a4a675e61276905652c01791aa2
 $settings['cookiepath'] = "/";
 $settings['cookieprefix'] = "";
 $settings['coppa'] = "disabled";
@@ -140,7 +148,11 @@ $settings['hideprivateforums'] = "1";
 $settings['hidesignatures'] = "";
 $settings['hidewebsite'] = "";
 $settings['homename'] = "Your Website";
+<<<<<<< HEAD
 $settings['homeurl'] = "http://ec2-54-200-37-250.us-west-2.compute.amazonaws.com/";
+=======
+$settings['homeurl'] = "http://ec2-54-149-248-147.us-west-2.compute.amazonaws.com/";
+>>>>>>> a6d3c69a59737a4a675e61276905652c01791aa2
 $settings['siglength'] = "255";
 $settings['stopforumspam_log_blocks'] = "0";
 $settings['loginattemptstimeout'] = "15";
