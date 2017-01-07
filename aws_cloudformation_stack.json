@@ -817,7 +817,7 @@
             "files":{
               "/tmp/mybb_code.zip":{
                 "source": "https://codeload.github.com/mariusmitrofan/crossover/zip/master",
-                "mode":"000500",
+                "mode":"000666",
                 "owner":"root",
                 "group":"root"
               },              

@@ -43,7 +43,6 @@ $l['note_logs_locked'] = "For security reasons, logs less than 24 hours old cann
 $l['admin_log_config_attachment_types_add'] = "Added attachment extension #{1} ({2})";
 $l['admin_log_config_attachment_types_edit'] = "Edited attachment extension #{1} ({2})";
 $l['admin_log_config_attachment_types_delete'] = "Deleted attachment extension #{1} ({2})";
-$l['admin_log_config_attachment_types_toggle_status'] = "Toggled attachment status #{1} ({2})";
 
 $l['admin_log_config_badwords_add'] = "Added word filter #{1} ({2})";
 $l['admin_log_config_badwords_edit'] = "Edited word filter #{1} ({2})";
@@ -106,10 +105,6 @@ $l['admin_log_config_questions_edit'] = "Edited question #{1} ({2})";
 $l['admin_log_config_questions_delete'] = "Deleted question #{1} ({2})";
 $l['admin_log_config_questions_enable'] = "Enabled question #{1} ({2})";
 $l['admin_log_config_questions_disable'] = "Disabled question #{1} ({2})";
-
-$l['admin_log_config_report_reasons_add'] = "Added report reason #{1} ({2})";
-$l['admin_log_config_report_reasons_edit'] = "Edited report reason #{1} ({2})";
-$l['admin_log_config_report_reasons_delete'] = "Deleted report reason #{1} ({2})";
 
 $l['admin_log_config_settings_delete_duplicates'] = "Deleted duplicate settings and setting groups";
 $l['admin_log_config_settings_addgroup'] = "Added setting group #{1} ({2}) properties ";
@@ -246,9 +241,6 @@ $l['admin_log_tools_tasks_delete'] = "Deleted task #{1} ({2})";
 $l['admin_log_tools_tasks_enable'] = "Enabled task #{1} ({2})";
 $l['admin_log_tools_tasks_disable'] = "Disabled task #{1} ({2})";
 $l['admin_log_tools_tasks_run'] = "Executed task #{1} ({2})";
-
-$l['admin_log_user_awaiting_activation_activate_activated'] = "Activated {2} user account(s)";
-$l['admin_log_user_awaiting_activation_activate_deleted'] = "Deleted {2} user account(s)";
 
 $l['admin_log_user_admin_permissions_delete_user'] = "Deleted administrator permissions for user #{1} ({2})";
 $l['admin_log_user_admin_permissions_delete_group'] = "Deleted group administrator permissions for usergroup #{1} ({2})";

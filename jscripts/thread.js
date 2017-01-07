@@ -120,7 +120,7 @@ var Thread = {
 			{
 				$.each(json.errors, function(i, message)
 				{
-					$.jGrowl(lang.post_fetch_error + ' ' + message, {theme:'jgrowl_error'});
+					$.jGrowl(lang.post_fetch_error + ' ' + message);
 				});
 				return false;
 			}
@@ -209,7 +209,7 @@ var Thread = {
 
 							$.each(json.errors, function(i, message)
 							{
-								$.jGrowl(lang.quick_edit_update_error + ' ' + message, {theme:'jgrowl_error'});
+								$.jGrowl(lang.quick_edit_update_error + ' ' + message);
 							});
 							$(this).html($('#pid_' + pid + '_temp').html());
 						}
@@ -227,7 +227,7 @@ var Thread = {
 							}
 							else
 							{
-								$.jGrowl(json.moderation_post, {theme:'jgrowl_success'});
+								$.jGrowl(json.moderation_post);
 								$('#post_' + pid).slideToggle();
 							}
 						}
@@ -349,7 +349,7 @@ var Thread = {
 
 				$.each(json.errors, function(i, message)
 				{
-					$.jGrowl(lang.quick_reply_post_error + ' ' + message, {theme:'jgrowl_error'});
+					$.jGrowl(lang.quick_reply_post_error + ' ' + message);
 				});
 				$('#quickreply_spinner').hide();
 			}
@@ -434,12 +434,6 @@ var Thread = {
 		$('#post_'+pid).slideToggle("slow");
 	},
 
-	showDeletedPost: function(pid)
-	{
-		$('#deleted_post_'+pid).slideToggle("slow");
-		$('#post_'+pid).slideToggle("slow");
-	},
-
 	deletePost: function(pid)
 	{
 		$.prompt(quickdelete_confirm, {
@@ -461,7 +455,7 @@ var Thread = {
 							{
 								$.each(json.errors, function(i, message)
 								{
-									$.jGrowl(lang.quick_delete_error + ' ' + message, {theme:'jgrowl_error'});
+									$.jGrowl(lang.quick_delete_error + ' ' + message);
 								});
 							}
 							else if(json.hasOwnProperty("data"))
@@ -475,21 +469,21 @@ var Thread = {
 									$("#quick_delete_" + pid).hide();
 									$("#quick_restore_" + pid).show();
 
-									$.jGrowl(lang.quick_delete_success, {theme:'jgrowl_success'});
+									$.jGrowl(lang.quick_delete_success);
 								}
 								else if(json.data == 2)
 								{
 									// Actually deleted
 									$('#post_'+pid).slideToggle("slow");
 									
-									$.jGrowl(lang.quick_delete_success, {theme:'jgrowl_success'});
+									$.jGrowl(lang.quick_delete_success);
 								} else if(json.data == 3) 
 								{
 									// deleted thread --> redirect
 									
 									if(!json.hasOwnProperty("url")) 
 									{
-										$.jGrowl(lang.unknown_error, {theme:'jgrowl_error'});
+										$.jGrowl(lang.unknown_error);
 									}
 									
 									// set timeout for redirect
@@ -499,12 +493,12 @@ var Thread = {
 									}, 3000);
 									
 									// print success message
-									$.jGrowl(lang.quick_delete_thread_success, {theme:'jgrowl_success'});
+									$.jGrowl(lang.quick_delete_thread_success);
 								}
 							}
 							else
 							{
-								$.jGrowl(lang.unknown_error, {theme:'jgrowl_error'});
+								$.jGrowl(lang.unknown_error);
 							}
 						}
 					});
@@ -537,7 +531,7 @@ var Thread = {
 							{
 								$.each(json.errors, function(i, message)
 								{
-									$.jGrowl(lang.quick_restore_error + ' ' + message, {theme:'jgrowl_error'});
+									$.jGrowl(lang.quick_restore_error + ' ' + message);
 								});
 							}
 							else if(json.hasOwnProperty("data"))
@@ -548,11 +542,11 @@ var Thread = {
 								$("#quick_delete_" + pid).show();
 								$("#quick_restore_" + pid).hide();
 
-								$.jGrowl(lang.quick_restore_success, {theme:'jgrowl_success'});
+								$.jGrowl(lang.quick_restore_success);
 							}
 							else
 							{
-								$.jGrowl(lang.unknown_error, {theme:'jgrowl_error'});
+								$.jGrowl(lang.unknown_error);
 							}
 						}
 					});

@@ -230,12 +230,14 @@ if($mybb->input['action'] == "add")
 
 	if(!$mybb->input['starttime_time'])
 	{
-		$mybb->input['starttime_time'] = gmdate($mybb->settings['timeformat'], TIME_NOW);
+		$start_time = explode("-", gmdate("g-i-a", TIME_NOW));
+		$mybb->input['starttime_time'] = $start_time[0].":".$start_time[1]." ".$start_time[2];
 	}
 
 	if(!$mybb->input['endtime_time'])
 	{
-		$mybb->input['endtime_time'] = gmdate($mybb->settings['timeformat'], TIME_NOW);
+		$end_time = explode("-", gmdate("g-i-a", TIME_NOW));
+		$mybb->input['endtime_time'] = $end_time[0].":".$end_time[1]." ".$end_time[2];
 	}
 
 	if($mybb->input['starttime_day'])
@@ -617,7 +619,8 @@ if($mybb->input['action'] == "edit")
 			admin_redirect("index.php?module=forum-announcements");
 		}
 
-		$mybb->input['starttime_time'] = gmdate( $mybb->settings['timeformat'], $announcement['startdate']);
+		$start_time = explode("-", gmdate("g-i-a", $announcement['startdate']));
+		$mybb->input['starttime_time'] = $start_time[0].":".$start_time[1]." ".$start_time[2];
 
 		$startday = gmdate("j", $announcement['startdate']);
 
@@ -638,7 +641,8 @@ if($mybb->input['action'] == "edit")
 			$endtime_checked[1] = "checked=\"checked\"";
 			$endtime_checked[2] = "";
 
-			$mybb->input['endtime_time'] = gmdate( $mybb->settings['timeformat'],$announcement['enddate']);
+			$end_time = explode("-", gmdate("g-i-a", $announcement['enddate']));
+			$mybb->input['endtime_time'] = $end_time[0].":".$end_time[1]." ".$end_time[2];
 
 			$endday = gmdate("j", $announcement['enddate']);
 

@@ -712,7 +712,7 @@ function upgrade17_redoconfig()
  *
  * Please see the MyBB Docs for advanced
  * database configuration for larger installations
- * https://docs.mybb.com/
+ * http://docs.mybb.com/
  */
 
 {$database_config}

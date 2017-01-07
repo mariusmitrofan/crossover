@@ -323,7 +323,6 @@ class Moderation
 		// Update forum count
 		update_forum_counters($thread['fid'], $updated_counters);
 		update_forum_lastpost($thread['fid']);
-		mark_reports($tid, 'thread');
 
 		$plugins->run_hooks("class_moderation_delete_thread", $tid);
 
@@ -802,7 +801,6 @@ class Moderation
 				$fid = $post['fid'];
 				$mastertid = $post['tid'];
 				$first = 0;
-				$visible = $post['visible'];
 			}
 			else
 			{
@@ -846,7 +844,6 @@ class Moderation
 					{
 						--$user_counters[$post['uid']]['num_threads'];
 					}
-					$thread_counters[$post['tid']]['attachmentcount'] -= $post['attachmentcount'];
 				}
 				elseif($post['visible'] == 0)
 				{
@@ -858,6 +855,7 @@ class Moderation
 					// Subtract 1 deleted post from post's thread
 					--$thread_counters[$post['tid']]['deletedposts'];
 				}
+				$thread_counters[$post['tid']]['attachmentcount'] -= $post['attachmentcount'];
 
 				// Subtract 1 post from post's forum
 				if($post['threadvisible'] == 1 && $post['visible'] == 1)
@@ -871,12 +869,6 @@ class Moderation
 				else
 				{
 					--$forum_counters[$post['fid']]['deletedposts'];
-				}
-
-				// Add attachment count to thread
-				if($visible == 1)
-				{
-					$thread_counters[$mastertid]['attachmentcount'] += $post['attachmentcount'];
 				}
 			}
 		}
@@ -1231,12 +1223,12 @@ class Moderation
 							'pid' => $pid,
 							'uid' => $attachment['uid'],
 							'filename' => $db->escape_string($attachment['filename']),
-							'filetype' => $db->escape_string($attachment['filetype']),
+							'filetype' => $attachment['filetype'],
 							'filesize' => $attachment['filesize'],
-							'attachname' => $db->escape_string($attachment['attachname']),
+							'attachname' => $attachment['attachname'],
 							'downloads' => $attachment['downloads'],
 							'visible' => $attachment['visible'],
-							'thumbnail' => $db->escape_string($attachment['thumbnail'])
+							'thumbnail' => $attachment['thumbnail']
 						);
 						$new_aid = $db->insert_query("attachments", $attachment_array);
 
@@ -1569,6 +1561,16 @@ class Moderation
 			update_first_post($thread['tid']);
 		}
 
+		// Subtract merged thread from user counter
+		if($mergethread['visible'] == 1 && $forum_cache[$mergethread['fid']]['usethreadcounts'] == 1)
+		{
+			if(!isset($user_posts[$mergethread['uid']]['threadnum']))
+			{
+				$user_posts[$mergethread['uid']]['threadnum'] = 0;
+			}
+			--$user_posts[$mergethread['uid']]['threadnum'];
+		}
+
 		// Update thread count if thread has a new firstpost and is visible
 		if($thread['uid'] != $new_firstpost['uid'] && $thread['visible'] == 1 && $forum_cache[$thread['fid']]['usethreadcounts'] == 1)
 		{
@@ -1839,7 +1841,8 @@ class Moderation
 						'threadnum' => 0
 					);
 				}
-				++$user_counters[$newthread['uid']]['threadnum'];
+				// Subtract thread from old thread opener
+				--$user_counters[$newthread['uid']]['threadnum'];
 			}
 			elseif($visible == -1)
 			{
@@ -2250,12 +2253,9 @@ class Moderation
 				);
 			}
 
-			if(!isset($user_counters[$thread['uid']]))
+			if(!isset($user_counters[$thread['uid']]['num_threads']))
 			{
-				$user_counters[$thread['uid']] = array(
-					'num_posts' => 0,
-					'num_threads' => 0
-				);
+				$user_counters[$thread['uid']]['num_threads'] = 0;
 			}
 
 			if($thread['visible'] == 1)
@@ -2289,12 +2289,9 @@ class Moderation
 				");
 				while($posters = $db->fetch_array($query1))
 				{
-					if(!isset($user_counters[$posters['uid']]))
+					if(!isset($user_counters[$posters['uid']]['num_posts']))
 					{
-						$user_counters[$posters['uid']] = array(
-							'num_posts' => 0,
-							'num_threads' => 0
-						);
+						$user_counters[$posters['uid']]['num_posts'] = 0;
 					}
 
 					if($newforum['usepostcounts'] != 0 && $forum['usepostcounts'] == 0)

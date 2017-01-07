@@ -137,6 +137,7 @@ class CustomModeration extends Moderation
 				foreach($delete_tids as $delete_tid)
 				{
 					$this->delete_thread($delete_tid);
+					mark_reports($delete_tid, "thread");
 				}
 				// return true here so the code in execute() above knows to redirect to the forum
 				return true;
@@ -240,7 +241,7 @@ class CustomModeration extends Moderation
 						"uid" => $mybb->user['uid'],
 						"username" => $mybb->user['username'],
 						"message" => $post_options['splitpostsaddreply'],
-						"ipaddress" => my_inet_pton(get_ip()),
+						"ipaddress" => $db->escape_binary(my_inet_pton(get_ip())),
 					);
 					// Set up the post options from the input.
 					$post['options'] = array(
@@ -412,7 +413,7 @@ class CustomModeration extends Moderation
 						"uid" => $mybb->user['uid'],
 						"username" => $mybb->user['username'],
 						"message" => $thread_options['addreply'],
-						"ipaddress" => my_inet_pton(get_ip()),
+						"ipaddress" => $db->escape_binary(my_inet_pton(get_ip())),
 					);
 
 					// Set up the post options from the input.

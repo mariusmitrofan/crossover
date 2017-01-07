@@ -41,7 +41,7 @@ var UserCP = {
 				{
 					$.each(json.errors, function(i, message)
 					{
-					  $.jGrowl(lang.buddylist_error + message, {theme:'jgrowl_error'});
+					  $.jGrowl(lang.buddylist_error+message);
 					});
 					return false;
 				}

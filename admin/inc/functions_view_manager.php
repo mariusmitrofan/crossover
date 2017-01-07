@@ -575,8 +575,7 @@ document.write('".str_replace("/", "\/", $field_select)."');
 				$view_type = "group";
 				if($view['username'])
 				{
-					$username = htmlspecialchars_uni($view['username']);
-					$created = "<br /><small>{$lang->created_by} {$username}</small>";
+					$created = "<br /><small>{$lang->created_by} {$view['username']}</small>";
 				}
 			}
 			else

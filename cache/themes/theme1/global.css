@@ -628,7 +628,7 @@ label.error {
 }
 
 form #message {
-	width: 500px;
+    width: 500px;
 }
 
 .editor {
@@ -876,7 +876,7 @@ blockquote cite span.highlight {
 .red_alert a:link,
 .red_alert a:visited,
 .red_alert a:hover,
-.red_alert a:active {
+.red_alert  a:active  {
 	color: #A5161A;
 }
 
@@ -890,22 +890,6 @@ blockquote cite span.highlight {
 
 .low_warning {
 	color: #AE5700;
-}
-
-.imminent_banned {
-	color: #880000;
-}
-
-.high_banned {
-	color: #FF0000;
-}
-
-.moderate_banned {
-	color: #FF6600;
-}
-
-.low_banned {
-	color: #008000;
 }
 
 .online {
@@ -1068,24 +1052,6 @@ div.error ul {
 }
 
 .ignored_post .show_ignored_post a.button span {
-	background-position: 0 -400px;
-}
-
-.deleted_post_hidden {
-	border-top: 2px solid #ccc;
-	padding: 15px;
-}
-
-.deleted_post_collapsed {
-	border-top: 3px solid #333;
-	padding: 15px;
-}
-
-.deleted_post_collapsed .show_deleted_post {
-	margin-top: -15px;
-}
-
-.deleted_post_collapsed .show_deleted_post a.button span {
 	background-position: 0 -400px;
 }
 
@@ -1446,125 +1412,103 @@ a.button.report_user_button span {
 
 /** jGrowl Styling **/
 .jGrowl {
-	z-index: 9999;
-	color: #ffffff;
-	font-size: 12px;
-	font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-	position: fixed;
+  z-index: 9999;
+  color: #ffffff;
+  font-size: 12px;
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  position: fixed;
 }
 .jGrowl.top-left {
-	left: 0px;
-	top: 0px;
+  left: 0px;
+  top: 0px;
 }
 .jGrowl.top-right {
-	right: 0px;
-	top: 0px;
+  right: 0px;
+  top: 0px;
 }
 .jGrowl.bottom-left {
-	left: 0px;
-	bottom: 0px;
+  left: 0px;
+  bottom: 0px;
 }
 .jGrowl.bottom-right {
-	right: 0px;
-	bottom: 0px;
+  right: 0px;
+  bottom: 0px;
 }
 .jGrowl.center {
-	top: 0px;
-	width: 50%;
-	left: 25%;
+  top: 0px;
+  width: 50%;
+  left: 25%;
 }
 
 /** Cross Browser Styling **/
 
 .jGrowl.center .jGrowl-notification,
 .jGrowl.center .jGrowl-closer {
-	margin-left: auto;
-	margin-right: auto;
+  margin-left: auto;
+  margin-right: auto;
 }
 .jGrowl-notification {
-	background-color: transparent;
-	opacity: 0.9;
-	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
-	-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
-	zoom: 1;
-	width: 250px;
-	padding: 10px;
-	margin: 10px;
-	text-align: left;
-	display: none;
-	-moz-border-radius: 5px;
-	-webkit-border-radius: 5px;
-	border-radius: 5px;
-	word-break: break-all;
-}
-.jGrowl .jGrowl-notification {
-	min-height: 40px;
+  background-color: #000000;
+  opacity: 0.9;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
+  zoom: 1;
+  width: 250px;
+  padding: 10px;
+  margin: 10px;
+  text-align: left;
+  display: none;
+  border-radius: 5px;
+  word-break: break-all;
+  min-height: 40px;
 }
 .jGrowl-notification .ui-state-highlight,
 .jGrowl-notification .ui-widget-content .ui-state-highlight,
 .jGrowl-notification .ui-widget-header .ui-state-highlight {
-	border: 1px solid #000;
-	background: #000;
-	color: #fff;
+  border: 1px solid #000;
+  background: #000;
+  color: #fff;
 }
 .jGrowl-notification .jGrowl-header {
-	font-weight: bold;
-	font-size: .85em;
+  font-weight: bold;
+  font-size: .85em;
 }
 .jGrowl-notification .jGrowl-close {
-	background-color: transparent;
-	color: inherit;
-	border: none;
-	z-index: 99;
-	float: right;
-	font-weight: bold;
-	font-size: 1em;
-	cursor: pointer;
+  background-color: transparent;
+  color: inherit;
+  border: none;
+  z-index: 99;
+  float: right;
+  font-weight: bold;
+  font-size: 1em;
+  cursor: pointer;
 }
 .jGrowl-closer {
-	background-color: #000000;
-	opacity: 0.9;
-	filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
-	-ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
-	zoom: 1;
-	width: 250px;
-	padding: 10px;
-	margin: 10px;
-	text-align: left;
-	display: none;
-	border-radius: 5px;
-	word-break: break-all;
-	padding-top: 4px;
-	padding-bottom: 4px;
-	cursor: pointer;
-	font-size: .9em;
-	font-weight: bold;
-	text-align: center;
+  background-color: #000000;
+  opacity: 0.9;
+  filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
+  -ms-filter: progid:DXImageTransform.Microsoft.Alpha(Opacity=(0.9*100));
+  zoom: 1;
+  width: 250px;
+  padding: 10px;
+  margin: 10px;
+  text-align: left;
+  display: none;
+  border-radius: 5px;
+  word-break: break-all;
+  padding-top: 4px;
+  padding-bottom: 4px;
+  cursor: pointer;
+  font-size: .9em;
+  font-weight: bold;
+  text-align: center;
 }
 .jGrowl-closer .ui-state-highlight,
 .jGrowl-closer .ui-widget-content .ui-state-highlight,
 .jGrowl-closer .ui-widget-header .ui-state-highlight {
-	border: 1px solid #000;
-	background: #000;
-	color: #fff;
-}
-
-.jGrowl .jGrowl-notification.jgrowl_success {
-    background: lightgreen;
-    border: 1px solid lightgreen;
-    color: #333;
-}
-
-.jGrowl .jGrowl-notification.jgrowl_error {
-    background: red;
-    border: 1px solid red;
-    color: #333;
-}
-
-.jGrowl .jGrowl-notification.jgrowl_process, .jGrowl .jGrowl-closer {
-    background: yellow;
-    border: 1px solid yellow;
-	color: #333;
+  border: 1px solid #000;
+  background: #000;
+  color: #fff;
 }
 
 /** Hide jGrowl when printing **/
@@ -1632,74 +1576,74 @@ a.button.report_user_button span {
 * Copyright (c) 2015 Trent Richardson; Licensed MIT */
 
 .jqifade{
-	position: absolute;
-	background-color: #777777;
+	position: absolute; 
+	background-color: #777777; 
 }
 iframe.jqifade{
 	display:block;
 	z-index:-1;
 }
-div.jqi{
-	width: 400px;
+div.jqi{ 
+	width: 400px; 
 	max-width:90%;
-	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif;
-	position: absolute;
-	background-color: #ffffff;
-	font-size: 11px;
-	text-align: left;
+	font-family: Verdana, Geneva, Arial, Helvetica, sans-serif; 
+	position: absolute; 
+	background-color: #ffffff; 
+	font-size: 11px; 
+	text-align: left; 
 	border: solid 1px #eeeeee;
 	border-radius: 6px;
 	-moz-border-radius: 6px;
 	-webkit-border-radius: 6px;
 	padding: 7px;
 }
-div.jqi .jqicontainer{
+div.jqi .jqicontainer{ 
 }
-div.jqi .jqiclose{
+div.jqi .jqiclose{ 
 	position: absolute;
-	top: 4px; right: -2px;
-	width: 18px;
-	cursor: default;
-	color: #bbbbbb;
-	font-weight: bold;
+	top: 4px; right: -2px; 
+	width: 18px; 
+	cursor: default; 
+	color: #bbbbbb; 
+	font-weight: bold; 
 }
 div.jqi .jqistate{
 	background-color: #fff;
 }
 div.jqi .jqititle{
 	padding: 5px 10px;
-	font-size: 16px;
-	line-height: 20px;
+	font-size: 16px; 
+	line-height: 20px; 
 	border-bottom: solid 1px #eeeeee;
 }
-div.jqi .jqimessage{
-	padding: 10px;
-	line-height: 20px;
-	color: #444444;
+div.jqi .jqimessage{ 
+	padding: 10px; 
+	line-height: 20px; 
+	color: #444444; 
 	overflow: auto;
 }
 div.jqi .jqibuttonshide{
 	display: none;
-}
-div.jqi .jqibuttons{
-	text-align: right;
+} 
+div.jqi .jqibuttons{ 
+	text-align: right; 
 	margin: 0 -7px -7px -7px;
-	border-top: solid 1px #e4e4e4;
+	border-top: solid 1px #e4e4e4; 
 	background-color: #f4f4f4;
 	border-radius: 0 0 6px 6px;
 	-moz-border-radius: 0 0 6px 6px;
 	-webkit-border-radius: 0 0 6px 6px;
 }
-div.jqi .jqibuttons button{
+div.jqi .jqibuttons button{ 
 	margin: 0;
 	padding: 15px 20px;
 	background-color: transparent;
-	font-weight: normal;
+	font-weight: normal; 
 	border: none;
-	border-left: solid 1px #e4e4e4;
-	color: #777;
-	font-weight: bold;
-	font-size: 12px;
+	border-left: solid 1px #e4e4e4; 
+	color: #777; 
+	font-weight: bold; 
+	font-size: 12px; 
 }
 div.jqi .jqibuttons button.jqidefaultbutton{
 	color: #489afe;
@@ -1712,12 +1656,12 @@ div.jqi .jqibuttons button:focus{
 div.jqi .jqibuttons button[disabled]{
 	color: #aaa;
 }
-.jqiwarning .jqi .jqibuttons{
+.jqiwarning .jqi .jqibuttons{ 
 	background-color: #b95656;
 }
 
 /* sub states */
-div.jqi .jqiparentstate::after{
+div.jqi .jqiparentstate::after{ 
 	background-color: #777;
 	opacity: 0.6;
 	filter: alpha(opacity=60);

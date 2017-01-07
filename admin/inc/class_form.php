@@ -130,16 +130,7 @@ class DefaultForm
 	 */
 	function generate_numeric_field($name, $value=0, $options=array())
 	{
-		if(is_numeric($value))
-		{
-			$value = (float)$value;
-		}
-		else
-		{
-			$value = '';
-		}
-
-		$input = "<input type=\"number\" name=\"{$name}\" value=\"{$value}\"";
+		$input = "<input type=\"number\" name=\"".$name."\" value=\"".(int)$value."\"";
 		if(isset($options['min']))
 		{
 			$input .= " min=\"".$options['min']."\"";
@@ -422,7 +413,7 @@ class DefaultForm
 		foreach($option_list as $value => $option)
 		{
 			$select_add = '';
-			if((!is_array($selected) || !empty($selected)) && ((string)$value == (string)$selected || (is_array($selected) && in_array((string)$value, $selected))))
+			if(!empty($selected) && ((string)$value == (string)$selected || (is_array($selected) && in_array((string)$value, $selected))))
 			{
 				$select_add = " selected=\"selected\"";
 			}

@@ -74,13 +74,6 @@ class DB_MySQL implements DB_Base
 	public $current_link;
 
 	/**
-	 * The database name.
-	 *
-	 * @var string
-	 */
-	public $database;
-
-	/**
 	 * Explanation of a query.
 	 *
 	 * @var string
@@ -266,8 +259,6 @@ class DB_MySQL implements DB_Base
 	 */
 	function select_db($database)
 	{
-		$this->database = $database;
-
 		$this->current_link = &$this->read_link;
 		$read_success = @mysql_select_db($database, $this->read_link) or $this->error("[READ] Unable to select database", $this->read_link);
 		if($this->write_link)
@@ -645,25 +636,18 @@ class DB_MySQL implements DB_Base
 	{
 		if($prefix)
 		{
-			if(version_compare($this->get_version(), '5.0.2', '>='))
-			{
-				$query = $this->query("SHOW FULL TABLES FROM `$database` WHERE table_type = 'BASE TABLE' AND `Tables_in_$database` LIKE '".$this->escape_string($prefix)."%'");
-			}
-			else
-			{
-				$query = $this->query("SHOW TABLES FROM `$database` LIKE '".$this->escape_string($prefix)."%'");
-			}
+			$query = $this->query("
+				SELECT `TABLE_NAME` FROM INFORMATION_SCHEMA.TABLES 
+				WHERE `TABLE_SCHEMA` = '$database' AND `TABLE_TYPE` = 'BASE TABLE' 
+				AND `TABLE_NAME` LIKE '".$this->escape_string($prefix)."%'
+			");
 		}
 		else
 		{
-			if(version_compare($this->get_version(), '5.0.2', '>='))
-			{
-				$query = $this->query("SHOW FULL TABLES FROM `$database` WHERE table_type = 'BASE TABLE'");
-			}
-			else
-			{
-				$query = $this->query("SHOW TABLES FROM `$database`");
-			}
+			$query = $this->query("
+				SELECT `TABLE_NAME` FROM INFORMATION_SCHEMA.TABLES 
+				WHERE `TABLE_SCHEMA` = '$database' AND `TABLE_TYPE` = 'BASE TABLE'
+			");
 		}
 
 		$tables = array();
@@ -684,15 +668,11 @@ class DB_MySQL implements DB_Base
 	function table_exists($table)
 	{
 		// Execute on master server to ensure if we've just created a table that we get the correct result
-		if(version_compare($this->get_version(), '5.0.2', '>='))
-		{
-			$query = $this->query("SHOW FULL TABLES FROM `".$this->database."` WHERE table_type = 'BASE TABLE' AND `Tables_in_".$this->database."` = '{$this->table_prefix}$table'");
-		}
-		else
-		{
-			$query = $this->query("SHOW TABLES LIKE '{$this->table_prefix}$table'");
-		}
-
+		$query = $this->write_query("
+			SELECT `TABLE_NAME` FROM INFORMATION_SCHEMA.TABLES 
+			WHERE `TABLE_TYPE` = 'BASE TABLE' 
+			AND `TABLE_NAME` LIKE '{$this->table_prefix}$table'
+		");
 		$exists = $this->num_rows($query);
 		if($exists > 0)
 		{
@@ -1477,6 +1457,7 @@ class DB_MySQL implements DB_Base
 			'cp1251' => 'Windows Cyrillic',
 			'cp1256' => 'Windows Arabic',
 			'cp1257' => 'Windows Baltic',
+			'binary' => 'Binary pseudo charset',
 			'geostd8' => 'GEOSTD8 Georgian',
 			'cp932' => 'SJIS for Windows Japanese',
 			'eucjpms' => 'UJIS for Windows Japanese',
@@ -1525,6 +1506,7 @@ class DB_MySQL implements DB_Base
 			'cp1251' => 'cp1251_general_ci',
 			'cp1256' => 'cp1256_general_ci',
 			'cp1257' => 'cp1257_general_ci',
+			'binary' => 'binary',
 			'geostd8' => 'geostd8_general_ci',
 			'cp932' => 'cp932_japanese_ci',
 			'eucjpms' => 'eucjpms_japanese_ci',

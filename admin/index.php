@@ -11,17 +11,14 @@
 define("IN_MYBB", 1);
 define("IN_ADMINCP", 1);
 
-// Here you can change how much of an Admin CP IP address must match in a previous session for the user is validated (e.g. 3 means a.b.c need to match)
+// Here you can change how much of an Admin CP IP address must match in a previous session for the user is validated (defaults to 3 which matches a.b.c)
 define("ADMIN_IP_SEGMENTS", 0);
-define("ADMIN_IPV6_SEGMENTS", 0);
 
 require_once dirname(dirname(__FILE__))."/inc/init.php";
 
 $shutdown_queries = $shutdown_functions = array();
 
 send_page_headers();
-
-header('X-Frame-Options: SAMEORIGIN');
 
 if(!isset($config['admin_dir']) || !file_exists(MYBB_ROOT.$config['admin_dir']."/inc/class_page.php"))
 {
@@ -53,7 +50,6 @@ if(!isset($cp_language))
 
 // Load global language phrases
 $lang->load("global");
-$lang->load("messages", true);
 
 if(function_exists('mb_internal_encoding') && !empty($lang->settings['charset']))
 {
@@ -162,22 +158,6 @@ elseif($mybb->input['do'] == "login")
 	require_once MYBB_ROOT."inc/datahandlers/login.php";
 	$loginhandler = new LoginDataHandler("get");
 
-	// Determine login method
-	$login_lang_string = $lang->error_invalid_username_password;
-	switch($mybb->settings['username_method'])
-	{
-		case 0: // Username only
-			$login_lang_string = $lang->sprintf($login_lang_string, $lang->login_username);
-			break;
-		case 1: // Email only
-			$login_lang_string = $lang->sprintf($login_lang_string, $lang->login_email);
-			break;
-		case 2: // Username and email
-		default:
-			$login_lang_string = $lang->sprintf($login_lang_string, $lang->login_username_and_password);
-			break;
-	}
-
 	// Validate PIN first
 	if(!empty($config['secret_pin']) && (empty($mybb->input['pin']) || $mybb->input['pin'] != $config['secret_pin']))
 	{
@@ -227,7 +207,7 @@ elseif($mybb->input['do'] == "login")
 		}
 		else
 		{
-			$default_page->show_login($login_lang_string, "error");
+			$default_page->show_login($lang->error_invalid_secret_pin, "error");
 		}
 	}
 
@@ -257,12 +237,12 @@ elseif($mybb->input['do'] == "login")
 
 		$db->delete_query("adminsessions", "uid='{$mybb->user['uid']}'");
 
-		$sid = md5(random_str(50));
+		$sid = md5(uniqid(microtime(true), true));
 
 		$useragent = $_SERVER['HTTP_USER_AGENT'];
-		if(my_strlen($useragent) > 200)
+		if(my_strlen($useragent) > 100)
 		{
-			$useragent = my_substr($useragent, 0, 200);
+			$useragent = my_substr($useragent, 0, 100);
 		}
 
 		// Create a new admin session for this user
@@ -403,7 +383,7 @@ else
 			$mybb->user = get_user($admin_session['uid']);
 
 			// Login key has changed - force logout
-			if(!$mybb->user['uid'] || $mybb->user['loginkey'] !== $admin_session['loginkey'])
+			if(!$mybb->user['uid'] || $mybb->user['loginkey'] != $admin_session['loginkey'])
 			{
 				unset($mybb->user);
 			}
@@ -417,10 +397,10 @@ else
 					unset($mybb->user);
 				}
 				// If IP matching is set - check IP address against the session IP
-				else if(ADMIN_IP_SEGMENTS > 0 && strpos($ip_address, ':') === false)
+				else if(ADMIN_IP_SEGMENTS > 0)
 				{
 					$exploded_ip = explode(".", $ip_address);
-					$exploded_admin_ip = explode(".", my_inet_ntop($admin_session['ip']));
+					$exploded_admin_ip = explode(".", $admin_session['ip']);
 					$matches = 0;
 					$valid_ip = false;
 					for($i = 0; $i < ADMIN_IP_SEGMENTS; ++$i)
@@ -430,38 +410,6 @@ else
 							++$matches;
 						}
 						if($matches == ADMIN_IP_SEGMENTS)
-						{
-							$valid_ip = true;
-							break;
-						}
-					}
-
-					// IP doesn't match properly - show message on logon screen
-					if(!$valid_ip)
-					{
-						$login_message = $lang->error_invalid_ip;
-						unset($mybb->user);
-					}
-				}
-				else if(ADMIN_IPV6_SEGMENTS > 0 && strpos($ip_address, ':') !== false)
-				{
-					// Expand IPv6 addresses
-					$hex = unpack("H*hex", my_inet_pton($ip_address));         
-					$expanded_ip = substr(preg_replace("/([A-f0-9]{4})/", "$1:", $hex['hex']), 0, -1);
-					$hex_admin = unpack("H*hex", $admin_session['ip']);         
-					$expanded_admin_ip = substr(preg_replace("/([A-f0-9]{4})/", "$1:", $hex_admin['hex']), 0, -1);
-
-					$exploded_ip = explode(":", $expanded_ip);
-					$exploded_admin_ip = explode(":", $expanded_admin_ip);
-					$matches = 0;
-					$valid_ip = false;
-					for($i = 0; $i < ADMIN_IPV6_SEGMENTS; ++$i)
-					{
-						if($exploded_ip[$i] == $exploded_admin_ip[$i])
-						{
-							++$matches;
-						}
-						if($matches == ADMIN_IPV6_SEGMENTS)
 						{
 							$valid_ip = true;
 							break;
@@ -524,7 +472,6 @@ if(!empty($mybb->user['uid']))
 		$cp_language = $admin_options['cplanguage'];
 		$lang->set_language($cp_language, "admin");
 		$lang->load("global"); // Reload global language vars
-		$lang->load("messages", true);
 	}
 
 	if(!empty($admin_options['cpstyle']) && file_exists(MYBB_ADMIN_DIR."/styles/{$admin_options['cpstyle']}/main.css"))
@@ -578,6 +525,22 @@ if(!isset($mybb->user['uid']) || $logged_out == true)
 	}
 	elseif($fail_check == 1)
 	{
+		$login_lang_string = $lang->error_invalid_username_password;
+
+		switch($mybb->settings['username_method'])
+		{
+			case 0: // Username only
+				$login_lang_string = $lang->sprintf($login_lang_string, $lang->login_username);
+				break;
+			case 1: // Email only
+				$login_lang_string = $lang->sprintf($login_lang_string, $lang->login_email);
+				break;
+			case 2: // Username and email
+			default:
+				$login_lang_string = $lang->sprintf($login_lang_string, $lang->login_username_and_password);
+				break;
+		}
+
 		$page->show_login($login_lang_string, "error");
 	}
 	else
@@ -788,7 +751,7 @@ if($mybb->request_method == "post")
 	if($post_verify == true)
 	{
 		// If the post key does not match we switch the action to GET and set a message to show the user
-		if(!isset($mybb->input['my_post_key']) || $mybb->post_code !== $mybb->input['my_post_key'])
+		if(!isset($mybb->input['my_post_key']) || $mybb->post_code != $mybb->input['my_post_key'])
 		{
 			$mybb->request_method = "get";
 			$page->show_post_verify_error = true;

@@ -345,7 +345,7 @@ if($mybb->input['action'] == "utf8_conversion")
 				$convert_to_binary .= $comma.$names.preg_replace('/'.$type.'/i', $types[$type], $column['Type']).' '.$attributes;
 				$convert_to_utf8 .= "{$comma}{$names}{$column['Type']} CHARACTER SET {$character_set} COLLATE {$collation} {$attributes}";
 
-				$comma = ',';
+				$comma = $lang->comma;
 			}
 		}
 
@@ -850,12 +850,7 @@ if(!$mybb->input['action'])
 		++$errors;
 	}
 
-	$uploadspath = $mybb->settings['uploadspath'];
-	if(my_substr($uploadspath, 0, 1) == '.')
-	{
-		$uploadspath = MYBB_ROOT . $mybb->settings['uploadspath'];
-	}
-	if(is_writable($uploadspath))
+	if(is_writable('.'.$mybb->settings['uploadspath']))
 	{
 		$message_upload = "<span style=\"color: green;\">{$lang->writable}</span>";
 	}
@@ -865,12 +860,7 @@ if(!$mybb->input['action'])
 		++$errors;
 	}
 
-	$avataruploadpath = $mybb->settings['avataruploadpath'];
-	if(my_substr($avataruploadpath, 0, 1) == '.')
-	{
-		$avataruploadpath = MYBB_ROOT . $mybb->settings['avataruploadpath'];
-	}
-	if(is_writable($avataruploadpath))
+	if(is_writable('../'.$mybb->settings['avataruploadpath']))
 	{
 		$message_avatar = "<span style=\"color: green;\">{$lang->writable}</span>";
 	}
@@ -922,7 +912,7 @@ if(!$mybb->input['action'])
 
 	if($errors)
 	{
-		$page->output_error("<p><em>{$errors} {$lang->error_chmod}</span></strong> {$lang->chmod_info} <a href=\"https://docs.mybb.com/1.8/administration/security/file-permissions\" target=\"_blank\">MyBB Docs</a>.</em></p>");
+		$page->output_error("<p><em>{$errors} {$lang->error_chmod}</span></strong> {$lang->chmod_info} <a href=\"http://docs.mybb.com/HowTo_Chmod.html\" target=\"_blank\">MyBB Docs</a>.</em></p>");
 	}
 	else
 	{

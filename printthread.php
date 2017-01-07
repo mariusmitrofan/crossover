@@ -11,7 +11,7 @@
 define("IN_MYBB", 1);
 define('THIS_SCRIPT', 'printthread.php');
 
-$templatelist = "printthread,printthread_post,printthread_nav,forumdisplay_password_wrongpass,forumdisplay_password,printthread_multipage,printthread_multipage_page,printthread_multipage_page_current";
+$templatelist = "printthread,printthread_post,forumdisplay_password_wrongpass,forumdisplay_password,printthread_multipage,printthread_multipage_page,printthread_multipage_page_current";
 
 require_once "./global.php";
 require_once MYBB_ROOT."inc/functions_post.php";
@@ -49,7 +49,14 @@ $fid = $thread['fid'];
 $tid = $thread['tid'];
 
 // Is the currently logged in user a moderator of this forum?
-$ismod = is_moderator($fid);
+if(is_moderator($fid))
+{
+	$ismod = true;
+}
+else
+{
+	$ismod = false;
+}
 
 // Make sure we are looking at a real thread here.
 if(($thread['visible'] != 1 && $ismod == false) || ($thread['visible'] > 1 && $ismod == true))
@@ -126,22 +133,29 @@ $thread['threadlink'] = get_thread_link($tid);
 $postrows = '';
 if(is_moderator($forum['fid'], "canviewunapprove"))
 {
-	$visible = "AND (p.visible='0' OR p.visible='1')";
+    $visible = "AND (p.visible='0' OR p.visible='1')";
 }
 else
 {
-	$visible = "AND p.visible='1'";
+    $visible = "AND p.visible='1'";
 }
 $query = $db->query("
-	SELECT u.*, u.username AS userusername, p.*
-	FROM ".TABLE_PREFIX."posts p
-	LEFT JOIN ".TABLE_PREFIX."users u ON (u.uid=p.uid)
-	WHERE p.tid='$tid' {$visible}
-	ORDER BY p.dateline
+    SELECT u.*, u.username AS userusername, p.*
+    FROM ".TABLE_PREFIX."posts p
+    LEFT JOIN ".TABLE_PREFIX."users u ON (u.uid=p.uid)
+    WHERE p.tid='$tid' {$visible}
+    ORDER BY p.dateline
 	LIMIT {$start}, {$perpage}
 ");
 while($postrow = $db->fetch_array($query))
 {
+	if($postrow['userusername'])
+	{
+		$postrow['username'] = $postrow['userusername'];
+	}
+	$postrow['subject'] = htmlspecialchars_uni($parser->parse_badwords($postrow['subject']));
+	$postrow['date'] = my_date($mybb->settings['dateformat'], $postrow['dateline'], null, 0);
+	$postrow['profilelink'] = build_profile_link($postrow['username'], $postrow['uid']);
 	$parser_options = array(
 		"allow_html" => $forum['allowhtml'],
 		"allow_mycode" => $forum['allowmycode'],
@@ -167,15 +181,6 @@ while($postrow = $db->fetch_array($query))
 		$parser_options['allow_videocode'] = 0;
 	}
 
-	if($postrow['userusername'])
-	{
-		$postrow['username'] = $postrow['userusername'];
-	}
-	$postrow['username'] = htmlspecialchars_uni($postrow['username']);
-	$postrow['subject'] = htmlspecialchars_uni($parser->parse_badwords($postrow['subject']));
-	$postrow['date'] = my_date($mybb->settings['dateformat'], $postrow['dateline'], null, 0);
-	$postrow['profilelink'] = build_profile_link($postrow['username'], $postrow['uid']);
-
 	$postrow['message'] = $parser->parse_message($postrow['message'], $parser_options);
 	$plugins->run_hooks("printthread_post");
 	eval("\$postrows .= \"".$templates->get("printthread_post")."\";");
@@ -194,7 +199,7 @@ output_page($printable);
  */
 function makeprintablenav($pid=0, $depth="--")
 {
-	global $mybb, $db, $pforumcache, $fid, $forum, $lang, $templates;
+	global $mybb, $db, $pforumcache, $fid, $forum, $lang;
 	if(!is_array($pforumcache))
 	{
 		$parlist = build_parent_list($fid, "fid", "OR", $forum['parentlist']);
@@ -210,8 +215,7 @@ function makeprintablenav($pid=0, $depth="--")
 	{
 		foreach($pforumcache[$pid] as $key => $forumnav)
 		{
-			$forumnav['link'] = get_forum_link($forumnav['fid']);
-			eval("\$forums .= \"".$templates->get("printthread_nav")."\";");
+			$forums .= "+".$depth." $lang->forum {$forumnav['name']} (<i>".$mybb->settings['bburl']."/".get_forum_link($forumnav['fid'])."</i>)<br />\n";
 			if(!empty($pforumcache[$forumnav['fid']]))
 			{
 				$newdepth = $depth."-";

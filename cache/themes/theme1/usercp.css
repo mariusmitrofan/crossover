@@ -4,7 +4,6 @@
 	background-image: url(../../../images/usercp_sprite.png);
 	background-repeat: no-repeat;
 }
-
 .usercp_nav_composepm {
 	background-position: 0 0;
 }
@@ -146,8 +145,4 @@
 .pmspace_text {
 	padding: 1px 5px;
 	display: inline-block;
-}
-
-.new_pm {
-	font-weight: bold;
 }

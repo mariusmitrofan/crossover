@@ -92,20 +92,6 @@ class MailHandler
 	public $parse_format = 'text';
 
 	/**
-	 * The last received response from the SMTP server.
-	 *
-	 * @var string
-	 */
-	public $data = '';
-
-	/**
-	 * The last received response code from the SMTP server.
-	 *
-	 * @var string
-	 */
-	public $code = 0;
-
-	/**
 	 * Selects between AdminEmail and ReturnEmail, dependant on if ReturnEmail is filled.
 	 * 
 	 * @return string
@@ -153,6 +139,7 @@ class MailHandler
 		}
 		else
 		{
+			$this->from = "";
 			if($mybb->settings['mail_handler'] == 'smtp')
 			{
 				$this->from = $this->get_from_email();

@@ -32,13 +32,6 @@ class DB_SQLite implements DB_Base
 	public $type;
 
 	/**
-	 * PDOStatement objects of performed queries.
-	 *
-	 * @var array 
-	 */
-	public $query_objects = array();
-
-	/**
 	 * A count of the number of queries.
 	 *
 	 * @var int
@@ -216,8 +209,6 @@ class DB_SQLite implements DB_Base
 			}
 		}
 
-		$this->query_objects[] = $query;
-
 		if($this->error_number($query) > 0 && !$hide_errors)
 		{
 			$this->error($string, $query);
@@ -337,25 +328,6 @@ class DB_SQLite implements DB_Base
 	function data_seek($query, $row)
 	{
 		$this->db->seek($query, $row);
-	}
-
-	/**
-	 * Closes cursors of registered queries.
-	 *
-	 */
-	function close_cursors()
-	{
-		$result = true;
-
-		foreach($this->query_objects as $query)
-		{
-			if(!$query->closeCursor())
-			{
-				$result = false;
-			}
-		}
-
-		return $result;
 	}
 
 	/**

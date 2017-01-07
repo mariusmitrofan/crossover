@@ -53,16 +53,6 @@ if($attachment['thumbnail'] == '' && isset($mybb->input['thumbnail']))
 	error($lang->error_invalidattachment);
 }
 
-$attachtypes = (array)$cache->read('attachtypes');
-$ext = get_extension($attachment['filename']);
-
-if(empty($attachtypes[$ext]))
-{
-	error($lang->error_invalidattachment);
-}
-
-$attachtype = $attachtypes[$ext];
-
 $pid = $attachment['pid'];
 
 // Don't check the permissions on preview
@@ -93,20 +83,10 @@ if($pid || $attachment['uid'] != $mybb->user['uid'])
 	{
 		error($lang->error_invalidattachment);
 	}
-
-	if($attachtype['forums'] != -1 && strpos(','.$attachtype['forums'].',', ','.$fid.',') === false)
-	{
-		error_no_permission();
-	}
 }
 
 if(!isset($mybb->input['thumbnail'])) // Only increment the download count if this is not a thumbnail
 {
-	if(!is_member($attachtype['groups']))
-	{
-		error_no_permission();
-	}
-
 	$attachupdate = array(
 		"downloads" => $attachment['downloads']+1,
 	);

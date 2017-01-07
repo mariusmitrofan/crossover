@@ -88,7 +88,7 @@ var Rating = {
 		{
 			$.each(json.errors, function(i, error)
 			{
-				$.jGrowl(lang.ratings_update_error + ' ' + error, {theme:'jgrowl_error'});
+				$.jGrowl(lang.ratings_update_error + ' ' + error);
 			});
 		}
 		else if(json.hasOwnProperty("success"))
@@ -97,7 +97,7 @@ var Rating = {
 			element.parent().before(element.next());
 			element.removeClass("star_rating_notrated");
 
-			$.jGrowl(json.success, {theme:'jgrowl_success'});
+			$.jGrowl(json.success);
 			if(json.hasOwnProperty("average"))
 			{
 				$("#current_rating_"+element_id).html(json.average);

@@ -1347,7 +1347,7 @@ function upgrade12_redoconfig()
  *
  * Please see the MyBB Docs for advanced
  * database configuration for larger installations
- * https://docs.mybb.com/
+ * http://docs.mybb.com/
  */
 
 \$config['database']['type'] = '{$config['dbtype']}';

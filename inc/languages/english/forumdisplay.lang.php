@@ -8,7 +8,6 @@
 $l['post_thread'] = "Post Thread";
 $l['moderated_by'] = "Moderated By:";
 $l['nothreads'] = "Sorry, but there are currently no threads in this forum with the specified date and time limiting options.";
-$l['nopermission'] = "Sorry, but you do not have permission to view threads in this forum.";
 $l['search_forum'] = "Search this Forum:";
 $l['thread'] = "Thread";
 $l['author'] = "Author";
@@ -70,7 +69,7 @@ $l['inline_go'] = "Go";
 $l['clear'] = "Clear";
 $l['sub_forums_in']  = "Forums in '{1}'";
 $l['forum_rules'] = "{1} - Rules";
-$l['subforums'] = "Sub Forums:";
+$l['subforums'] = "<strong>Sub Forums:</strong>";
 $l['asc'] = "asc";
 $l['desc'] = "desc";
 $l['forum_announcements'] = "Forum Announcements";
@@ -94,7 +93,6 @@ $l['page_selected'] = "All <strong>{1}</strong> threads on this page are selecte
 $l['all_selected'] = "All <strong>{1}</strong> threads in this forum are selected.";
 $l['select_all'] = "Select all <strong>{1}</strong> threads in this forum.";
 $l['clear_selection'] = "Clear Selection.";
-$l['deleted_thread'] = "Deleted Thread";
 
 $l['error_containsnoforums'] = "Sorry, but the forum you are currently viewing does not contain any child forums.";
 

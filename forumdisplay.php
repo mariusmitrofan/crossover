@@ -11,15 +11,14 @@
 define("IN_MYBB", 1);
 define('THIS_SCRIPT', 'forumdisplay.php');
 
-$templatelist = "forumdisplay,forumdisplay_thread,forumbit_depth1_cat,forumbit_depth2_cat,forumbit_depth2_forum,forumdisplay_subforums,forumdisplay_threadlist,forumdisplay_moderatedby,forumdisplay_searchforum,forumdisplay_thread_rating,forumdisplay_threadlist_rating";
-$templatelist .= ",forumbit_depth1_forum_lastpost,forumdisplay_thread_multipage_page,forumdisplay_thread_multipage,forumdisplay_thread_multipage_more,forumdisplay_thread_gotounread,forumbit_depth2_forum_lastpost,forumdisplay_rules_link,forumdisplay_orderarrow,forumdisplay_newthread";
-$templatelist .= ",multipage,multipage_breadcrumb,multipage_end,multipage_jump_page,multipage_nextpage,multipage_page,multipage_page_current,multipage_page_link_current,multipage_prevpage,multipage_start,forumdisplay_thread_unapproved_posts,forumdisplay_nothreads";
-$templatelist .= ",forumjump_advanced,forumjump_special,forumjump_bit,forumdisplay_password_wrongpass,forumdisplay_password,forumdisplay_inlinemoderation_custom_tool,forumbit_subforums,forumbit_moderators,forumbit_depth2_forum_lastpost_never,forumbit_depth2_forum_lastpost_hidden";
+$templatelist = "forumdisplay,forumdisplay_thread,forumbit_depth1_cat,forumbit_depth2_cat,forumbit_depth2_forum,forumdisplay_subforums,forumdisplay_threadlist,forumdisplay_moderatedby,forumdisplay_newthread,forumdisplay_searchforum,forumdisplay_thread_rating,forumdisplay_threadlist_rating,forumdisplay_threadlist_sortrating";
+$templatelist .= ",forumbit_depth1_forum_lastpost,forumdisplay_thread_multipage_page,forumdisplay_thread_multipage,forumdisplay_thread_multipage_more,forumdisplay_thread_gotounread,forumbit_depth2_forum_lastpost,forumdisplay_rules,forumdisplay_rules_link,forumdisplay_orderarrow";
+$templatelist .= ",multipage,multipage_breadcrumb,multipage_end,multipage_jump_page,multipage_nextpage,multipage_page,multipage_page_current,multipage_page_link_current,multipage_prevpage,multipage_start,forumdisplay_thread_icon,forumdisplay_thread_unapproved_posts,forumdisplay_nothreads,forumdisplay_announcements_announcement_modbit,forumbit_depth2_forum_viewers";
+$templatelist .= ",forumjump_advanced,forumjump_special,forumjump_bit,forumdisplay_password_wrongpass,forumdisplay_password,forumdisplay_inlinemoderation_custom_tool,forumdisplay_inlinemoderation_custom,forumbit_subforums,forumbit_moderators,forumbit_depth2_forum_lastpost_never,forumbit_depth2_forum_lastpost_hidden";
 $templatelist .= ",forumdisplay_usersbrowsing_user,forumdisplay_usersbrowsing,forumdisplay_inlinemoderation,forumdisplay_thread_modbit,forumdisplay_inlinemoderation_col,forumdisplay_inlinemoderation_selectall,forumdisplay_threadlist_clearpass,forumdisplay_thread_rating_moved";
-$templatelist .= ",forumdisplay_announcements_announcement,forumdisplay_announcements,forumdisplay_threads_sep,forumbit_depth3_statusicon,forumbit_depth3,forumdisplay_sticky_sep,forumdisplay_thread_attachment_count,forumdisplay_rssdiscovery,forumbit_moderators_group";
-$templatelist .= ",forumdisplay_inlinemoderation_openclose,forumdisplay_inlinemoderation_stickunstick,forumdisplay_inlinemoderation_softdelete,forumdisplay_inlinemoderation_restore,forumdisplay_inlinemoderation_delete,forumdisplay_inlinemoderation_manage,forumdisplay_nopermission";
-$templatelist .= ",forumbit_depth2_forum_unapproved_posts,forumbit_depth2_forum_unapproved_threads,forumbit_moderators_user,forumdisplay_inlinemoderation_standard,forumdisplay_threadlist_prefixes_prefix,forumdisplay_threadlist_prefixes,forumdisplay_thread_icon,forumdisplay_rules";
-$templatelist .= ",forumdisplay_thread_deleted,forumdisplay_announcements_announcement_modbit,forumbit_depth2_forum_viewers,forumdisplay_threadlist_sortrating,forumdisplay_inlinemoderation_custom,forumdisplay_announcement_rating,forumdisplay_inlinemoderation_approveunapprove";
+$templatelist .= ",forumdisplay_announcements_announcement,forumdisplay_announcements,forumdisplay_threads_sep,forumbit_depth3_statusicon,forumbit_depth3,forumdisplay_sticky_sep,forumdisplay_thread_attachment_count,forumdisplay_rssdiscovery,forumdisplay_announcement_rating,forumbit_moderators_group";
+$templatelist .= ",forumdisplay_inlinemoderation_openclose,forumdisplay_inlinemoderation_stickunstick,forumdisplay_inlinemoderation_softdelete,forumdisplay_inlinemoderation_restore,forumdisplay_inlinemoderation_delete,forumdisplay_inlinemoderation_manage,forumdisplay_inlinemoderation_approveunapprove";
+$templatelist .= ",forumbit_depth2_forum_unapproved_posts,forumbit_depth2_forum_unapproved_threads,forumbit_moderators_user,forumdisplay_inlinemoderation_standard,forumdisplay_threadlist_prefixes_prefix,forumdisplay_threadlist_prefixes";
 
 require_once "./global.php";
 require_once MYBB_ROOT."inc/functions_post.php";
@@ -315,7 +314,7 @@ if($mybb->settings['browsingthisforum'] != 0)
 
 				if($user['invisible'] != 1 || $mybb->usergroup['canviewwolinvis'] == 1 || $user['uid'] == $mybb->user['uid'])
 				{
-					$user['username'] = format_name(htmlspecialchars_uni($user['username']), $user['usergroup'], $user['displaygroup']);
+					$user['username'] = format_name($user['username'], $user['usergroup'], $user['displaygroup']);
 					$user['profilelink'] = build_profile_link($user['username'], $user['uid']);
 					eval("\$onlinemembers .= \"".$templates->get("forumdisplay_usersbrowsing_user", 1, 0)."\";");
 					$comma = $lang->comma;
@@ -339,15 +338,15 @@ if($mybb->settings['browsingthisforum'] != 0)
 	if($inviscount && $mybb->usergroup['canviewwolinvis'] != 1)
 	{
 		$invisonline = $lang->sprintf($lang->users_browsing_forum_invis, $inviscount);
-	}
-
+	} 
+	
 
 	$onlinesep = '';
 	if($invisonline != '' && $onlinemembers)
 	{
 		$onlinesep = $lang->comma;
 	}
-
+	
 	$onlinesep2 = '';
 	if($invisonline != '' && $guestcount || $onlinemembers && $guestcount)
 	{
@@ -386,17 +385,9 @@ if($foruminfo['rulestype'] != 0 && $foruminfo['rules'])
 
 $bgcolor = "trow1";
 
-// Set here to fetch only approved/deleted topics (and then below for a moderator we change this).
-if($fpermissions['canviewdeletionnotice'] != 0)
-{
-	$visibleonly = "AND visible IN (-1,1)";
-	$tvisibleonly = "AND t.visible IN (-1,1)";
-}
-else
-{
-	$visibleonly = "AND visible='1'";
-	$tvisibleonly = "AND t.visible='1'";
-}
+// Set here to fetch only approved topics (and then below for a moderator we change this).
+$visibleonly = "AND visible='1'";
+$tvisibleonly = "AND t.visible='1'";
 
 // Check if the active user is a moderator and get the inline moderation tools.
 if(is_moderator($fid))
@@ -807,9 +798,6 @@ if($has_announcements == true)
 		$announcement['subject'] = $parser->parse_badwords($announcement['subject']);
 		$announcement['subject'] = htmlspecialchars_uni($announcement['subject']);
 		$postdate = my_date('relative', $announcement['startdate']);
-
-		$announcement['username'] = htmlspecialchars_uni($announcement['username']);
-
 		$announcement['profilelink'] = build_profile_link($announcement['username'], $announcement['uid']);
 
 		if($mybb->settings['allowthreadratings'] != 0 && $foruminfo['allowtratings'] != 0 && $fpermissions['canviewthreads'] != 0)
@@ -1015,7 +1003,7 @@ if(!empty($threadcache) && is_array($threadcache))
 		{
 			$bgcolor = "trow_shaded";
 		}
-		elseif($thread['visible'] == -1 && is_moderator($fid, "canviewdeleted"))
+		elseif($thread['visible'] == -1)
 		{
 			$bgcolor = "trow_shaded trow_deleted";
 		}
@@ -1039,11 +1027,11 @@ if(!empty($threadcache) && is_array($threadcache))
 		$thread['author'] = $thread['uid'];
 		if(!$thread['username'])
 		{
-			$thread['username'] = $thread['profilelink'] = htmlspecialchars_uni($thread['threadusername']);
+			$thread['username'] = $thread['threadusername'];
+			$thread['profilelink'] = $thread['threadusername'];
 		}
 		else
 		{
-			$thread['username'] = htmlspecialchars_uni($thread['username']);
 			$thread['profilelink'] = build_profile_link($thread['username'], $thread['uid']);
 		}
 
@@ -1095,7 +1083,7 @@ if(!empty($threadcache) && is_array($threadcache))
 		$rating = '';
 		if($mybb->settings['allowthreadratings'] != 0 && $foruminfo['allowtratings'] != 0)
 		{
-			if($moved[0] == "moved" || ($fpermissions['canviewdeletionnotice'] != 0 && $thread['visible'] == -1))
+			if($moved[0] == "moved")
 			{
 				eval("\$rating = \"".$templates->get("forumdisplay_thread_rating_moved")."\";");
 			}
@@ -1268,7 +1256,7 @@ if(!empty($threadcache) && is_array($threadcache))
 			$inline_edit_class = "subject_editable";
 		}
 
-		$lastposter = htmlspecialchars_uni($thread['lastposter']);
+		$lastposter = $thread['lastposter'];
 		$lastposteruid = $thread['lastposteruid'];
 		$lastpostdate = my_date('relative', $thread['lastpost']);
 
@@ -1326,14 +1314,7 @@ if(!empty($threadcache) && is_array($threadcache))
 
 		$plugins->run_hooks("forumdisplay_thread_end");
 
-		if($fpermissions['canviewdeletionnotice'] != 0 && $thread['visible'] == -1 && !is_moderator($fid, "canviewdeleted"))
-		{
-			eval("\$threads .= \"".$templates->get("forumdisplay_thread_deleted")."\";");
-		}
-		else
-		{
-			eval("\$threads .= \"".$templates->get("forumdisplay_thread")."\";");
-		}
+		eval("\$threads .= \"".$templates->get("forumdisplay_thread")."\";");
 	}
 
 	$customthreadtools = $standardthreadtools = '';
@@ -1457,12 +1438,7 @@ $inline_edit_js = $clearstoredpass = '';
 // Is this a real forum with threads?
 if($foruminfo['type'] != "c")
 {
-	if($fpermissions['canviewthreads'] != 1)
-	{
-		eval("\$threads = \"".$templates->get("forumdisplay_nopermission")."\";");
-	}
-
-	if(!$threadcount && $fpermissions['canviewthreads'] == 1)
+	if(!$threadcount)
 	{
 		eval("\$threads = \"".$templates->get("forumdisplay_nothreads")."\";");
 	}

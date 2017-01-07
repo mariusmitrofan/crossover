@@ -30,14 +30,7 @@ function upgrade26_dbchanges()
 	$db->update_query("helpdocs", array('usetranslation' => 1));
 	$db->update_query("helpsections", array('usetranslation' => 1));
 
-	if($db->type == 'pgsql')
-	{
-		$db->modify_column("polls", "numvotes", "text", "set");
-	}
-	else
-	{
-		$db->modify_column("polls", "numvotes", "text NOT NULL");
-	}
+	$db->modify_column("polls", "numvotes", "text NOT NULL");
 
 	if($db->field_exists('failedlogin', 'users'))
 	{

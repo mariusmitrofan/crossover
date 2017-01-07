@@ -4,16 +4,16 @@
  *
  * Please see the MyBB Docs for advanced
  * database configuration for larger installations
- * https://docs.mybb.com/
+ * http://docs.mybb.com/
  */
 
-$config['database']['type'] = 'mysqli';
-$config['database']['database'] = 'mybbdb';
-$config['database']['table_prefix'] = 'mybb_dld_';
+$config['database']['type'] = 'mysql';
+$config['database']['database'] = 'mybbdbname';
+$config['database']['table_prefix'] = 'mybb_';
 
-$config['database']['hostname'] = 'sdb7cljx37zilo.ccbtccmfhoxk.us-west-2.rds.amazonaws.com';
-$config['database']['username'] = 'dbuser';
-$config['database']['password'] = 'dbpassword';
+$config['database']['hostname'] = 'localhost:';
+$config['database']['username'] = 'mybbdbusername';
+$config['database']['password'] = 'mybbdbpassword';
 
 /**
  * Admin CP directory
@@ -95,37 +95,6 @@ $config['log_pruning'] = array(
 	'mail_logs' => 180, // Mail error logs
 	'user_mail_logs' => 180, // User mail logs
 	'promotion_logs' => 180 // Promotion logs
-);
-
-/**
- * Disallowed Remote Hosts
- *  List of hosts the fetch_remote_file() function will not
- *  perform requests to.
- *  It is recommended that you enter hosts resolving to the
- *  forum server here to prevent Server Side Request
- *  Forgery attacks.
- */
-
-$config['disallowed_remote_hosts'] = array(
-	'localhost',
-);
-
-/**
- * Disallowed Remote Addresses
- *  List of IPv4 addresses the fetch_remote_file() function
- *  will not perform requests to.
- *  It is recommended that you enter addresses resolving to
- *  the forum server here to prevent Server Side Request
- *  Forgery attacks.
- *  Removing all values disables resolving hosts in that
- *  function.
- */
-
-$config['disallowed_remote_addresses'] = array(
-	'127.0.0.1',
-	'10.0.0.0/8',
-	'172.16.0.0/12',
-	'192.168.0.0/16',
 );
 
 /**

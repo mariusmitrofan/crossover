@@ -288,21 +288,16 @@ function upload_avatar($avatar=array(), $uid=0)
 		}
 	}
 
-	// Check a list of known MIME types to establish what kind of avatar we're uploading
-	$attachtypes = (array)$cache->read('attachtypes');
-
-	$allowed_mime_types = array();
-	foreach($attachtypes as $attachtype)
+	// Next check the file size
+	if($avatar['size'] > ($mybb->settings['avatarsize']*1024) && $mybb->settings['avatarsize'] > 0)
 	{
-		if(defined('IN_ADMINCP') || is_member($attachtype['groups']) && $attachtype['avatarfile'])
-		{
-			$allowed_mime_types[$attachtype['mimetype']] = $attachtype['maxsize'];
-		}
+		delete_uploaded_file($avatarpath."/".$filename);
+		$ret['error'] = $lang->error_uploadsize;
+		return $ret;
 	}
 
-	$avatar['type'] = my_strtolower($avatar['type']);
-
-	switch($avatar['type'])
+	// Check a list of known MIME types to establish what kind of avatar we're uploading
+	switch(my_strtolower($avatar['type']))
 	{
 		case "image/gif":
 			$img_type =  1;
@@ -318,31 +313,17 @@ function upload_avatar($avatar=array(), $uid=0)
 		case "image/x-png":
 			$img_type = 3;
 			break;
-		case "image/bmp":
-		case "image/x-bmp":
-		case "image/x-windows-bmp":
-			$img_type = 6;
-			break;
 		default:
 			$img_type = 0;
 	}
 
 	// Check if the uploaded file type matches the correct image type (returned by getimagesize)
-	if(empty($allowed_mime_types[$avatar['type']]) || $img_dimensions[2] != $img_type || $img_type == 0)
+	if($img_dimensions[2] != $img_type || $img_type == 0)
 	{
 		$ret['error'] = $lang->error_uploadfailed;
 		delete_uploaded_file($avatarpath."/".$filename);
 		return $ret;
 	}
-
-	// Next check the file size
-	if(($avatar['size'] > ($mybb->settings['avatarsize']*1024) && $mybb->settings['avatarsize'] > 0) || $avatar['size'] > $allowed_mime_types[$avatar['type']] && !($mybb->settings['avatarsize'] > 0))
-	{
-		delete_uploaded_file($avatarpath."/".$filename);
-		$ret['error'] = $lang->error_uploadsize;
-		return $ret;
-	}
-
 	// Everything is okay so lets delete old avatars for this user
 	remove_avatars($uid, $filename);
 
@@ -405,17 +386,8 @@ function upload_attachment($attachment, $update_attachment=false)
 		return $ret;
 	}
 
-    $attachtypes = (array)$cache->read('attachtypes');
+    $attachtypes = $cache->read('attachtypes');
     $attachment = $plugins->run_hooks("upload_attachment_start", $attachment);
-
-	$allowed_mime_types = array();
-	foreach($attachtypes as $ext => $attachtype)
-	{
-		if(!is_member($attachtype['groups']) || ($attachtype['forums'] != -1 && strpos(','.$attachtype['forums'].',', ','.$forum['fid'].',') === false))
-		{
-			unset($attachtypes[$ext]);
-		}
-	}
 
     $ext = get_extension($attachment['name']);
     // Check if we have a valid extension
@@ -500,12 +472,6 @@ function upload_attachment($attachment, $update_attachment=false)
 			if(!@is_dir($mybb->settings['uploadspath']."/".$month_dir))
 			{
 				$month_dir = '';
-			}
-			else
-			{
-				$index = @fopen($mybb->settings['uploadspath']."/".$month_dir."/index.html", 'w');
-				@fwrite($index, "<html>\n<head>\n<title></title>\n</head>\n<body>\n&nbsp;\n</body>\n</html>");
-				@fclose($index);
 			}
 		}
 	}

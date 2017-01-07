@@ -229,14 +229,12 @@ function get_password_protected_forums($fids=array())
  */
 function clean_keywords($keywords)
 {
-	global $db;
-
 	$keywords = my_strtolower($keywords);
-	$keywords = $db->escape_string_like($keywords);
+	$keywords = str_replace("%", "\\%", $keywords);
 	$keywords = preg_replace("#\*{2,}#s", "*", $keywords);
 	$keywords = str_replace("*", "%", $keywords);
+	$keywords = preg_replace("#([\[\]\|\.\,:'])#s", " ", $keywords);
 	$keywords = preg_replace("#\s+#s", " ", $keywords);
-	$keywords = str_replace('\\"', '"', $keywords);
 
 	// Search for "and" or "or" and remove if it's at the beginning
 	$keywords = trim($keywords);
@@ -1094,10 +1092,7 @@ function perform_search_mysql($search)
 		if($search['matchusername'])
 		{
 			$user = get_user_by_username($search['author']);
-			if($user)
-			{
-				$userids[] = $user['uid'];
-			}
+			$userids[] = $user['uid'];
 		}
 		else
 		{
@@ -1511,10 +1506,7 @@ function perform_search_mysql_ft($search)
 		if($search['matchusername'])
 		{
 			$user = get_user_by_username($search['author']);
-			if($user)
-			{
-				$userids[] = $user['uid'];
-			}
+			$userids[] = $user['uid'];
 		}
 		else
 		{
