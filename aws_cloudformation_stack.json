@@ -922,7 +922,7 @@
                   "MYBB_DOMAINNAME": {"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]},
                   "MYBB_ADMINEMAIL": "admin@example.com",
                   "MYBB_DBNAME": { "Ref": "DBName" },
-                  "MYBB_DBUSERNAME": { "Ref": "DBUsername" },
+                  "MYBB_DBUSERNAME": { "Ref": "DBUser" },
                   "MYBB_DBPASSWORD": { "Ref": "DBPassword" },
                   "MYBB_DBHOSTNAME": {"Fn::GetAtt": ["DBInstance","Endpoint.Address"]},
                   "MYBB_DBPORT": "3306"
