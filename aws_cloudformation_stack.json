@@ -917,13 +917,15 @@
             "commands":{
               "install": {
                 "command": "/bin/bash ./install.sh",
-                "cwd": "/tmp/mybb/Source",
+                "cwd": "/var/www/html",
                 "env": {
+                  "MYBB_DOMAINNAME": {"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]},
                   "MYBB_ADMINEMAIL": "admin@example.com",
                   "MYBB_DBNAME": { "Ref": "DBName" },
                   "MYBB_DBUSERNAME": { "Ref": "DBUsername" },
                   "MYBB_DBPASSWORD": { "Ref": "DBPassword" },
                   "MYBB_DBHOSTNAME": {"Fn::GetAtt": ["DBInstance","Endpoint.Address"]},
+                  "MYBB_DBPORT": "3306"
                 }
               }
             }
