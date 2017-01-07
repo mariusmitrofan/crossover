@@ -1006,7 +1006,7 @@
                         ]
                       },
                       "' where sid=11;\n",
-
+                      "TRUNCATE TABLE  mybb_dld_datacache;\n"
                     ]
                   ]
                 },
