@@ -866,7 +866,7 @@
                       "$config['database']['hostname'] = '",
                       {
                         "Fn::GetAtt": [
-                          "MySQLDatabase",
+                          "DBInstance",
                           "Endpoint.Address"
                         ]
                       },
@@ -950,7 +950,7 @@
                       "mysql --host=",
                       {
                         "Fn::GetAtt": [
-                          "MySQLDatabase",
+                          "DBInstance",
                           "Endpoint.Address"
                         ]
                       },
@@ -1153,8 +1153,7 @@
                 "ElasticLoadBalancer",
                 "DNSName"
               ]
-            },
-            "/mybb"
+            }
           ]
         ]
       },
