@@ -823,8 +823,8 @@
                     "",
                     [
                       "#!/bin/bash\n",
-                      "mkdir -p /opt/release/old && cd /opt/release/old && rm -rf . && cd /var/www/html && scp -rp . /opt/release/old/ \n",
-                      "cd /tmp && rm -rf my_bb* && tar -xvf archive.tar.gz && cd my_bb* && mkdir -p /opt/release/new && scp -rp . /opt/release/new/ && scp -rp . /var/www/html/"
+                      "mkdir -p /opt/release/old && cd /opt/release/old && rm -rf /opt/release/old/ && cd /var/www/html && scp -rp . /opt/release/old/ \n",
+                      "cd /tmp && rm -rf my_bb* && tar -xvf archive.tar.gz && cd my_bb* && mkdir -p /opt/release/new && scp -rp . /opt/release/new/ && scp -rp . /var/www/html/ \n"
                     ]
                   ]
                 },
