@@ -916,7 +916,7 @@
             "commands":{
               "install": {
                 "command": "/bin/bash ./install.sh",
-                "cwd": "/var/www/html",
+                "cwd": "/var/www/html/aws_config",
                 "env": {
                   "MYBB_DOMAINNAME": {"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]},
                   "MYBB_ADMINEMAIL": "admin@example.com",
