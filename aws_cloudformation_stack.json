@@ -816,7 +816,10 @@
             },
             "files":{
               "/tmp/mybb_code.zip":{
-                "source": "https://codeload.github.com/mariusmitrofan/crossover/zip/master"
+                "source": "https://codeload.github.com/mariusmitrofan/crossover/zip/master",
+                "mode":"000500",
+                "owner":"root",
+                "group":"root"
               },              
               "/tmp/deploy-mybb":{
                 "content": {
@@ -833,6 +836,7 @@
                 "mode": "000500",
                 "owner": "root",
                 "group": "root"
+              }
             },
             "commands": {
               "01_configure_mybb": {
@@ -852,9 +856,8 @@
                 }
               }
             }
-          }
-        },
-        "configure_mybb": {
+          },
+          "configure_mybb": {
             "files":{
               "/var/www/html/inc/config.php":{
                 "content":{
