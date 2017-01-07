@@ -810,7 +810,8 @@
                 "httpd": [],
                 "php-mbstring": [],
                 "php-gd": [],
-                "unzip": []
+                "unzip": [],
+                "memcached": []
               }
             },
             "files":{
@@ -824,7 +825,8 @@
                     [
                       "#!/bin/bash\n",
                       "mkdir -p /opt/release/old && cd /opt/release/old && rm -rf /opt/release/old/ && cd /var/www/html && scp -rp . /opt/release/old/ \n",
-                      "cd /tmp && rm -rf my_bb* && unzip -o /tmp/mybb_code.zip -d /opt/mybb && cd /opt/mybb/crossover-master && mkdir -p /opt/release/new && scp -rp . /opt/release/new/ && scp -rp . /var/www/html/ \n"
+                      "cd /tmp && unzip -o /tmp/mybb_code.zip -d /opt/mybb \n",
+                      "cd /opt/mybb/crossover-master && mkdir -p /opt/release/new && scp -rp . /opt/release/new/ && scp -rp . /var/www/html/ \n"
                     ]
                   ]
                 },
@@ -841,6 +843,10 @@
             "services": {
               "sysvinit": {
                 "httpd": {
+                  "enabled": "true",
+                  "ensureRunning": "true"
+                },
+                "memcached":{
                   "enabled": "true",
                   "ensureRunning": "true"
                 }
