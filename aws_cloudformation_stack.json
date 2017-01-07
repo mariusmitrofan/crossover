@@ -932,7 +932,7 @@
                       "chmod 777 /var/www/html/cache/ /var/www/html/cache/themes/ /var/www/html/uploads/ /var/www/html/uploads/avatars/\n",
                       "chmod 666 /var/www/html/inc/languages/english/*.php /var/www/html/inc/languages/english/admin/*.php\n",
                       "chmod 777 /var/www/html/uploads/avatars/ /var/www/html/admin/backups/\n",
-                      "mkdir -p /opt/db_sample_data/ && mv /var/www/html/db.sql /opt/db_sample_data/db.sql"
+                      "mkdir -p /opt/db_sample_data/ && mv /var/www/html/db.sql /opt/db_sample_data/db.sql\n"
                     ]                  
                   ]
                 },
@@ -982,11 +982,79 @@
                 "mode":"000500",
                 "owner":"root",
                 "group":"root"
+              },
+              "/opt/db_sample_data/apply_settings.sql":{
+                "content":{
+                  "Fn::Join":[
+                    "",
+                    [
+                      "update mybb_dld_settings set value = '",
+                      "http://",
+                      {
+                        "Fn::GetAtt": [
+                          "ElasticLoadBalancer",
+                          "DNSName"
+                        ]
+                      },
+                      "' where sid in (4,6);\n",
+                      "update mybb_dld_settings set value = '",
+                      ".",
+                      {
+                        "Fn::GetAtt": [
+                          "ElasticLoadBalancer",
+                          "DNSName"
+                        ]
+                      },
+                      "' where sid=11;\n",
+
+                    ]
+                  ]
+                },
+                "mode":"000666",
+                "owner":"root",
+                "group":"root"
+              },
+              "/tmp/sql_apply_db_settings":{
+                "content":{
+                  "Fn::Join":[
+                    "",
+                    [
+                      "#!/bin/bash\n",
+                      "mysql --host=",
+                      {
+                        "Fn::GetAtt": [
+                          "DBInstance",
+                          "Endpoint.Address"
+                        ]
+                      },
+                      " --user=",
+                      {
+                        "Ref": "DBUser"
+                      },
+                      " --password=",
+                      {
+                        "Ref": "DBPassword"
+                      },
+                      " ",
+                      {
+                        "Ref": "DBName"
+                      },
+                      " < /opt/db_sample_data/apply_settings.sql"
+                    ]
+                  ]
+                },
+                "mode":"000500",
+                "owner":"root",
+                "group":"root"
               }
             },
             "commands":{
               "01_install_sample_sql_data":{
                 "command":"/tmp/sql_add_sample_data",
+                "cwd":"/tmp"
+              },
+              "02_apply_sql_settings_in_db":{
+                "command":"/tmp/sql_apply_db_settings",
                 "cwd":"/tmp"
               }
             }
