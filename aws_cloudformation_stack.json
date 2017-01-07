@@ -871,7 +871,7 @@
                         "Ref": "DBName"
                       },
                       "';\n",
-                      "$config['database']['table_prefix'] = 'mybb_';\n",
+                      "$config['database']['table_prefix'] = 'mybb_dld_';\n",
                       "$config['database']['hostname'] = '",
                       {
                         "Fn::GetAtt": [
