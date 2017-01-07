@@ -810,13 +810,13 @@
                 "httpd": [],
                 "php-mbstring": [],
                 "php-gd": [],
-                "git": []
+                "unzip": []
               }
             },
-            "sources": {
-              "/tmp": "https://gitlab.com/crossover_mariusmitrofan/my_bb/repository/archive.tar.gz"
-            },
             "files":{
+              "/tmp/mybb_code.zip":{
+                "source": "https://codeload.github.com/mariusmitrofan/crossover/zip/master"
+              },              
               "/tmp/deploy-mybb":{
                 "content": {
                   "Fn::Join": [
@@ -824,7 +824,7 @@
                     [
                       "#!/bin/bash\n",
                       "mkdir -p /opt/release/old && cd /opt/release/old && rm -rf /opt/release/old/ && cd /var/www/html && scp -rp . /opt/release/old/ \n",
-                      "cd /tmp && rm -rf my_bb* && tar -xvf archive.tar.gz && cd my_bb* && mkdir -p /opt/release/new && scp -rp . /opt/release/new/ && scp -rp . /var/www/html/ \n"
+                      "cd /tmp && rm -rf my_bb* && unzip -o /tmp/mybb_code.zip -d /opt/mybb && cd /opt/mybb/crossover-master && mkdir -p /opt/release/new && scp -rp . /opt/release/new/ && scp -rp . /var/www/html/ \n"
                     ]
                   ]
                 },
