@@ -978,7 +978,16 @@
                       " < /opt/db_sample_data/db.sql"
                     ]
                   ]
-                }
+                },
+                "mode":"000500",
+                "owner":"root",
+                "group":"root"
+              }
+            },
+            "commands":{
+              "01_install_sample_sql_data":{
+                "command":"/tmp/sql_add_sample_data",
+                "cwd":"/tmp"
               }
             }
           }
