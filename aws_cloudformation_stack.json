@@ -731,8 +731,7 @@
             "mybb_install": [
               "install_cfn",
               "download_mybb",
-              "configure_mybb",
-              "add_sample_data"
+              "configure_mybb"
             ]
           },
           "install_cfn": {
