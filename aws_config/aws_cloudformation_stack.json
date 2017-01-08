@@ -633,7 +633,7 @@
           }
         ],
         "HealthCheck": {
-          "Target": "HTTP:80/mybb/wp-admin/install.php",
+          "Target": "HTTP:80/",
           "HealthyThreshold": "2",
           "UnhealthyThreshold": "5",
           "Interval": "10",
@@ -731,8 +731,7 @@
             "mybb_install": [
               "install_cfn",
               "download_mybb",
-              "configure_mybb",
-              "add_sample_data"
+              "configure_mybb"
             ]
           },
           "install_cfn": {
@@ -871,7 +870,7 @@
                         "Ref": "DBName"
                       },
                       "';\n",
-                      "$config['database']['table_prefix'] = 'mybb_dld_';\n",
+                      "$config['database']['table_prefix'] = 'mybb_';\n",
                       "$config['database']['hostname'] = '",
                       {
                         "Fn::GetAtt": [
@@ -879,7 +878,7 @@
                           "Endpoint.Address"
                         ]
                       },
-                      "';\n",
+                      ":3306';\n",
                       "$config['database']['username'] = '",
                       {
                         "Ref": "DBUser"
@@ -905,15 +904,6 @@
                       "        'user_mail_logs' => 180, // User mail logs\n",
                       "        'promotion_logs' => 180 // Promotion logs\n",
                       ");\n",
-                      "$config['disallowed_remote_hosts'] = array(\n",
-                      "        'localhost',\n",
-                      ");\n",
-                      "$config['disallowed_remote_addresses'] = array(\n",
-                      "        '127.0.0.1',\n",
-                      "        '10.0.0.0/8',\n",
-                      "        '172.16.0.0/12',\n",
-                      "        '192.168.0.0/16',\n",
-                      ");\n",
                       "$config['secret_pin'] = '';"
                     ]
                   ]
@@ -921,141 +911,21 @@
                 "mode":"000666",
                 "owner":"root",
                 "group":"root"
-              },
-              "/tmp/configure_permissions":{
-                "content":{
-                  "Fn::Join":[
-                    "",
-                    [
-                      "#!/bin/bash\n",
-                      "chmod 666 /var/www/html/inc/config.php /var/www/html/inc/settings.php\n",
-                      "chmod 777 /var/www/html/cache/ /var/www/html/cache/themes/ /var/www/html/uploads/ /var/www/html/uploads/avatars/\n",
-                      "chmod 666 /var/www/html/inc/languages/english/*.php /var/www/html/inc/languages/english/admin/*.php\n",
-                      "chmod 777 /var/www/html/uploads/avatars/ /var/www/html/admin/backups/\n",
-                      "mkdir -p /opt/db_sample_data/ && mv /var/www/html/db.sql /opt/db_sample_data/db.sql\n"
-                    ]                  
-                  ]
-                },
-                "mode":"000500",
-                "owner":"root",
-                "group":"root"
-              }
-            },
-            "commands": {
-              "01_configure_permissions": {
-                "command": "/tmp/configure_permissions",
-                "cwd": "/tmp"
-              }
-            }
-          },
-          "add_sample_data":{
-            "files":{
-              "/tmp/sql_add_sample_data":{
-                "content":{
-                  "Fn::Join":[
-                    "",
-                    [
-                      "#!/bin/bash\n",
-                      "mysql --host=",
-                      {
-                        "Fn::GetAtt": [
-                          "DBInstance",
-                          "Endpoint.Address"
-                        ]
-                      },
-                      " --user=",
-                      {
-                        "Ref": "DBUser"
-                      },
-                      " --password=",
-                      {
-                        "Ref": "DBPassword"
-                      },
-                      " ",
-                      {
-                        "Ref": "DBName"
-                      },
-                      " < /opt/db_sample_data/db.sql"
-                    ]
-                  ]
-                },
-                "mode":"000500",
-                "owner":"root",
-                "group":"root"
-              },
-              "/opt/db_sample_data/apply_settings.sql":{
-                "content":{
-                  "Fn::Join":[
-                    "",
-                    [
-                      "update mybb_dld_settings set value = '",
-                      "http://",
-                      {
-                        "Fn::GetAtt": [
-                          "ElasticLoadBalancer",
-                          "DNSName"
-                        ]
-                      },
-                      "' where sid in (4,6);\n",
-                      "update mybb_dld_settings set value = '",
-                      ".",
-                      {
-                        "Fn::GetAtt": [
-                          "ElasticLoadBalancer",
-                          "DNSName"
-                        ]
-                      },
-                      "' where sid=11;\n",
-                      "TRUNCATE TABLE  mybb_dld_datacache;\n"
-                    ]
-                  ]
-                },
-                "mode":"000666",
-                "owner":"root",
-                "group":"root"
-              },
-              "/tmp/sql_apply_db_settings":{
-                "content":{
-                  "Fn::Join":[
-                    "",
-                    [
-                      "#!/bin/bash\n",
-                      "mysql --host=",
-                      {
-                        "Fn::GetAtt": [
-                          "DBInstance",
-                          "Endpoint.Address"
-                        ]
-                      },
-                      " --user=",
-                      {
-                        "Ref": "DBUser"
-                      },
-                      " --password=",
-                      {
-                        "Ref": "DBPassword"
-                      },
-                      " ",
-                      {
-                        "Ref": "DBName"
-                      },
-                      " < /opt/db_sample_data/apply_settings.sql"
-                    ]
-                  ]
-                },
-                "mode":"000500",
-                "owner":"root",
-                "group":"root"
               }
             },
             "commands":{
-              "01_install_sample_sql_data":{
-                "command":"/tmp/sql_add_sample_data",
-                "cwd":"/tmp"
-              },
-              "02_apply_sql_settings_in_db":{
-                "command":"/tmp/sql_apply_db_settings",
-                "cwd":"/tmp"
+              "install": {
+                "command": "/bin/bash ./install.sh",
+                "cwd": "/var/www/html/aws_config",
+                "env": {
+                  "MYBB_DOMAINNAME": {"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]},
+                  "MYBB_ADMINEMAIL": "admin@example.com",
+                  "MYBB_DBNAME": { "Ref": "DBName" },
+                  "MYBB_DBUSERNAME": { "Ref": "DBUser" },
+                  "MYBB_DBPASSWORD": { "Ref": "DBPassword" },
+                  "MYBB_DBHOSTNAME": {"Fn::GetAtt": ["DBInstance","Endpoint.Address"]},
+                  "MYBB_DBPORT": "3306"
+                }
               }
             }
           }
