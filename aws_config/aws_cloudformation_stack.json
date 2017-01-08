@@ -147,7 +147,7 @@
       "Default": "2",
       "Description": "The initial number of WebServer instances (recommended value is of at least 2 in order to achieve high-availability from the start)",
       "Type": "Number",
-      "MinValue": "1",
+      "MinValue": "2",
       "MaxValue": "5",
       "ConstraintDescription": "must be between 1 and 5 EC2 instances."
     },
