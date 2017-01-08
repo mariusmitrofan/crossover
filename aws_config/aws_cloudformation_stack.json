@@ -143,19 +143,9 @@
       "AllowedPattern": "[a-zA-Z0-9]*",
       "ConstraintDescription": "must contain only alphanumeric characters."
     },
-    "MultiAZDatabase": {
-      "Default": "false",
-      "Description": "Create a Multi-AZ MySQL Amazon RDS database instance",
-      "Type": "String",
-      "AllowedValues": [
-        "true",
-        "false"
-      ],
-      "ConstraintDescription": "must be either true or false."
-    },
     "WebServerCapacity": {
-      "Default": "1",
-      "Description": "The initial number of WebServer instances",
+      "Default": "2",
+      "Description": "The initial number of WebServer instances (recommended value is of at least 2 in order to achieve high-availability from the start)",
       "Type": "Number",
       "MinValue": "1",
       "MaxValue": "5",
@@ -168,6 +158,13 @@
       "MinValue": "5",
       "MaxValue": "1024",
       "ConstraintDescription": "must be between 5 and 1024Gb."
+    },
+    "MyBBAdminEmail": {
+      "Type": "String",
+      "Description": "Scaling-related and other notifications will be sent to this EMail address (including admin password reset email).",
+      "Default": "admin@example.com",
+      "AllowedPattern": "\\w[a-zA-Z0-9_\\-\\.]*@\\w[a-zA-Z0-9\\-\\.]*",
+      "ConstraintDescription": "Must be a valid email address!"
     }
   },
   "Mappings": {
@@ -919,7 +916,7 @@
                 "cwd": "/var/www/html/aws_config",
                 "env": {
                   "MYBB_DOMAINNAME": {"Fn::GetAtt": ["ElasticLoadBalancer","DNSName"]},
-                  "MYBB_ADMINEMAIL": "admin@example.com",
+                  "MYBB_ADMINEMAIL": {"Ref":"MyBBAdminEmail"},
                   "MYBB_DBNAME": { "Ref": "DBName" },
                   "MYBB_DBUSERNAME": { "Ref": "DBUser" },
                   "MYBB_DBPASSWORD": { "Ref": "DBPassword" },
@@ -1045,9 +1042,7 @@
           "Ref": "DBName"
         },
         "Engine": "MySQL",
-        "MultiAZ": {
-          "Ref": "MultiAZDatabase"
-        },
+        "MultiAZ": "true",
         "MasterUsername": {
           "Ref": "DBUser"
         },
