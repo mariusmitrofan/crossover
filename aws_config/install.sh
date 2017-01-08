@@ -18,7 +18,7 @@ echo $MYBB_DBHOSTNAME
 echo $MYBB_DBPORT
 
 # Configuration.
-CONFIG="./aws_config"
+CONFIG="."
 TARGET="/var/www/html"
 
 # Prepare and copy dynamic configuration files.
