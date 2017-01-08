@@ -606,8 +606,39 @@
     }
   },
   "Resources": {
+    "S3LogBucket": {
+      "Type": "AWS::S3::Bucket",
+      "DeletionPolicy": "Retain"
+    },
+    "S3LogBucketPolicy": {
+      "Type": "AWS::S3::BucketPolicy",
+      "Properties": {
+        "Bucket": { "Ref": "S3LogBucket" },
+        "PolicyDocument": {
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Resource": { "Fn::Join": [ "", [ "arn:aws:s3:::", { "Ref": "S3LogBucket" }, "/*" ]] },
+              "Principal": {
+                "AWS": { "Fn::FindInMap": [ "ELBAccountIdByRegion", { "Ref": "AWS::Region" }, "AccountId" ] }
+              },
+              "Action": [ "s3:PutObject" ]
+            }
+          ]
+        }
+      }
+    },
+    "NotificationTopic": {
+      "Type": "AWS::SNS::Topic",
+      "Properties": {
+        "Subscription": [
+          {"Endpoint": {"Ref": "MyBBAdminEmail" },"Protocol": "email" }
+        ]
+      }
+    },
     "ElasticLoadBalancer": {
       "Type": "AWS::ElasticLoadBalancing::LoadBalancer",
+      "DependsOn": "S3LogBucketPolicy",
       "Properties": {
         "AvailabilityZones": {
           "Fn::GetAZs": ""
@@ -635,6 +666,12 @@
           "UnhealthyThreshold": "5",
           "Interval": "10",
           "Timeout": "5"
+        },
+        "AccessLoggingPolicy": {
+          "S3BucketName": { "Ref": "S3LogBucket" },
+          "S3BucketPrefix": "elb-www-logs",
+          "Enabled": "true",
+          "EmitInterval": "5"
         }
       },
       "Metadata": {
@@ -690,14 +727,32 @@
         "LaunchConfigurationName": {
           "Ref": "LaunchConfig"
         },
-        "MinSize": "1",
+        "HealthCheckType": "ELB",
+        "HealthCheckGracePeriod": 120,
+        "MinSize": "2",
         "MaxSize": "5",
         "DesiredCapacity": {
           "Ref": "WebServerCapacity"
         },
+        "MetricsCollection": [
+          {
+            "Granularity": "1Minute"
+          }
+        ],
         "LoadBalancerNames": [
           {
             "Ref": "ElasticLoadBalancer"
+          }
+        ],
+        "NotificationConfigurations": [
+          {
+            "TopicARN": { "Ref": "NotificationTopic" },
+            "NotificationTypes": [
+              "autoscaling:EC2_INSTANCE_LAUNCH",
+              "autoscaling:EC2_INSTANCE_LAUNCH_ERROR",
+              "autoscaling:EC2_INSTANCE_TERMINATE",
+              "autoscaling:EC2_INSTANCE_TERMINATE_ERROR"
+            ]
           }
         ]
       },
@@ -708,8 +763,8 @@
       },
       "UpdatePolicy": {
         "AutoScalingRollingUpdate": {
-          "MinInstancesInService": "1",
-          "MaxBatchSize": "1",
+          "MinInstancesInService": "2",
+          "MaxBatchSize": "2",
           "PauseTime": "PT15M",
           "WaitOnResourceSignals": "true"
         }
