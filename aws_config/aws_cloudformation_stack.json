@@ -1228,7 +1228,7 @@
           "Ref": "DBName"
         },
         "Engine": "MySQL",
-        "MultiAZ": "false",
+        "MultiAZ": "true",
         "MasterUsername": {
           "Ref": "DBUser"
         },
