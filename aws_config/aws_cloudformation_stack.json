@@ -657,7 +657,7 @@
             "Version":"2012-10-17",
             "Statement": [{
               "Effect": "Allow",
-              "Resource": { "Fn::Join": [ "", [ "arn:aws:s3:::", { "Ref": "S3UploadsFolderBucket" }, "/*" ]] },
+              "Resource": "*",
               "Action": ["s3:*"]
             }]
           }
