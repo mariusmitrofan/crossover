@@ -141,7 +141,7 @@
       "MinLength": "8",
       "MaxLength": "41",
       "AllowedPattern": "[a-zA-Z0-9]*",
-      "ConstraintDescription": "must contain only alphanumeric characters."
+      "ConstraintDescription": "must contain only alphanumeric characters and the minimum string length is 8."
     },
     "WebServerCapacity": {
       "Default": "2",
