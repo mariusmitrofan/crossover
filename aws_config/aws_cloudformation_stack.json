@@ -619,9 +619,7 @@
             {
               "Effect": "Allow",
               "Resource": { "Fn::Join": [ "", [ "arn:aws:s3:::", { "Ref": "S3LogBucket" }, "/*" ]] },
-              "Principal": {
-                "AWS": { "Fn::FindInMap": [ "ELBAccountIdByRegion", { "Ref": "AWS::Region" }, "AccountId" ] }
-              },
+              "Principal": "*",
               "Action": [ "s3:PutObject" ]
             }
           ]
