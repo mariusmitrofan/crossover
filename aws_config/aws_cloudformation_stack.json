@@ -165,6 +165,14 @@
       "Default": "admin@example.com",
       "AllowedPattern": "\\w[a-zA-Z0-9_\\-\\.]*@\\w[a-zA-Z0-9\\-\\.]*",
       "ConstraintDescription": "Must be a valid email address!"
+    },
+    "AWSKey":{
+      "Type": "String",
+      "Description" : "AWS Key used to connect S3 bucket to upload folder (Default value = the key in the crossover project readme doc, so no need to change it)",
+    },
+    "AWSSecret":{
+      "Type": "String",
+      "Description" : "AWS Secret used to connect S3 bucket to upload folder (Default value = the key in the crossover project readme doc, so no need to change it)",
     }
   },
   "Mappings": {
@@ -781,7 +789,8 @@
             "mybb_install": [
               "install_cfn",
               "download_mybb",
-              "configure_mybb"
+              "configure_mybb",
+              "add_s3_as_upload_folder"
             ]
           },
           "install_cfn": {
@@ -860,7 +869,20 @@
                 "php-mbstring": [],
                 "php-gd": [],
                 "unzip": [],
-                "memcached": []
+                "memcached": [],
+                "git": [],
+                "gcc": [],
+                "libstdc++-devel": [],
+                "gcc-c++": [],
+                "fuse": [],
+                "fuse-devel": [],
+                "libcurl-devel": [],
+                "libxml2-devel": [],
+                "openssl-devel": [],
+                "mailcap": [],
+                "automake": [],
+                "telnet": [],
+                "at": []
               }
             },
             "files":{
@@ -978,6 +1000,57 @@
                 }
               }
             }
+          },
+          "add_s3_as_upload_folder":{
+            "files":{
+              "/tmp/s3fs.zip":{
+                "source": "https://github.com/s3fs-fuse/s3fs-fuse/archive/master.zip",
+                "mode":"000666",
+                "owner":"root",
+                "group":"root"
+              },
+              "/etc/passwd-s3fs":{
+                "content":{
+                  "Fn::Join":[
+                    "",
+                    [
+                      {"Ref":"AWSKey"},
+                      ":",
+                      {"Ref":"AWSSecret"}
+                    ]
+                  ]
+                },
+                "mode":"000600",
+                "owner":"root",
+                "group":"root"
+              },
+              "/etc/fuse.conf":{
+                "content":{
+                  "Fn::Join":[
+                    "",
+                    ["user_allow_other"]
+                  ]
+                },
+                "mode":"000644",
+                "owner":"root",
+                "group":"root"
+              }
+            },
+            "commands":{
+              "01_unzip_s3fs":{
+                "command":"sudo unzip -o /tmp/s3fs.zip -d /opt && rm -rf /tmp/s3fs.zip",
+                "cwd": "/tmp"
+              },
+              "02_install_s3fs":{
+                "command":"./autogen.sh && ./configure --prefix=/usr && make && sudo make install",
+                "cwd":"/opt/s3fs-fuse-master"
+              },
+              "03_mount_s3fs":{
+                "command":"uid=$(id -u root) && gid=$(id -g root) && s3fs mybb-crossover:/prod /var/www/html/uploads -o nonempty -o uid=$uid -o gid=$gid -o use_cache=/tmp -o allow_other -o passwd_file=/etc/passwd-s3fs",
+                "cwd":"/var/www/html"
+              }
+            }
+
           }
         },
         "AWS::CloudFormation::Designer": {
