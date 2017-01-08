@@ -165,6 +165,16 @@
       "Default": "admin@example.com",
       "AllowedPattern": "\\w[a-zA-Z0-9_\\-\\.]*@\\w[a-zA-Z0-9\\-\\.]*",
       "ConstraintDescription": "Must be a valid email address!"
+    },
+    "AWSKey":{
+      "Type": "String",
+      "Description" : "AWS Key used to connect S3 bucket to upload folder (Default value = the key in the crossover project readme doc, so no need to change it)",
+      "Default": ""
+    },
+    "AWSSecret":{
+      "Type": "String",
+      "Description" : "AWS Secret used to connect S3 bucket to upload folder (Default value = the key in the crossover project readme doc, so no need to change it)",
+      "Default": ""
     }
   },
   "Mappings": {
@@ -1021,13 +1031,26 @@
                 "owner":"root",
                 "group":"root"
               },
-              "/etc/fuse.conf":{
+              "/etc/passwd-s3fs":{
                 "content":{
                   "Fn::Join":[
                     "",
                     [
-                      "user_allow_other"
+                      {"Ref":"AWSKey"},
+                      ":",
+                      {"Ref":"AWSSecret"}
                     ]
+                  ]
+                },
+                "mode":"000600",
+                "owner":"root",
+                "group":"root"
+              },
+              "/etc/fuse.conf":{
+                "content":{
+                  "Fn::Join":[
+                    "",
+                    ["user_allow_other"]
                   ]
                 },
                 "mode":"000644",
@@ -1042,7 +1065,7 @@
                       "#!/bin/bash\n",
                       "uid=$(id -u root) && gid=$(id -g root) && s3fs ",
                       { "Ref": "S3UploadsFolderBucket" },
-                      ":/ /var/www/html/uploads -o nonempty -o uid=$uid -o gid=$gid -o use_cache=/tmp -o allow_other"
+                      ":/ /var/www/html/uploads -o nonempty -o uid=$uid -o gid=$gid -o use_cache=/tmp -o allow_other -o passwd_file=/etc/passwd-s3fs"
                     ]
                   ]
                 },
@@ -1069,7 +1092,7 @@
                 "cwd": "/var/www/html/uploads"
               },
               "05_add_blank_index_in_uploads_avatars":{
-                "command":"rm -f ./avatars/index.html && mkdir avatars && cp ./../aws_config/uploads_folder/avatars/index.html ./avatars/index.html",
+                "command":"rm -f ./avatars/index.html && cp ./../aws_config/uploads_folder/avatars/index.html ./avatars/index.html",
                 "cwd": "/var/www/html/uploads"
               }
             }
