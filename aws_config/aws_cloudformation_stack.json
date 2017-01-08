@@ -1092,7 +1092,7 @@
                 "cwd": "/var/www/html/uploads"
               },
               "05_add_blank_index_in_uploads_avatars":{
-                "command":"rm -f ./avatars/index.html && cp ./../aws_config/uploads_folder/avatars/index.html ./avatars/index.html",
+                "command":"rm -f ./avatars/index.html && mkdir avatars && cp ./../aws_config/uploads_folder/avatars/index.html ./avatars/index.html",
                 "cwd": "/var/www/html/uploads"
               }
             }
