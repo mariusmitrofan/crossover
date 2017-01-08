@@ -1050,6 +1050,10 @@
               "03_mount_s3fs":{
                 "command":"uid=$(id -u root) && gid=$(id -g root) && s3fs mybb-crossover:/prod /var/www/html/uploads -o nonempty -o uid=$uid -o gid=$gid -o use_cache=/tmp -o allow_other -o passwd_file=/etc/passwd-s3fs",
                 "cwd":"/var/www/html"
+              },
+              "04_add_blank_files_to_upload_folder":{
+                "command":"scp -rp . /var/www/html/uploads",
+                "cwd": "/var/www/html/aws_config/uploads_folder"
               }
             }
 
@@ -1170,7 +1174,7 @@
           "Ref": "DBName"
         },
         "Engine": "MySQL",
-        "MultiAZ": "true",
+        "MultiAZ": "false",
         "MasterUsername": {
           "Ref": "DBUser"
         },
