@@ -169,10 +169,12 @@
     "AWSKey":{
       "Type": "String",
       "Description" : "AWS Key used to connect S3 bucket to upload folder (Default value = the key in the crossover project readme doc, so no need to change it)",
+      "Default": ""
     },
     "AWSSecret":{
       "Type": "String",
       "Description" : "AWS Secret used to connect S3 bucket to upload folder (Default value = the key in the crossover project readme doc, so no need to change it)",
+      "Default": ""
     }
   },
   "Mappings": {
